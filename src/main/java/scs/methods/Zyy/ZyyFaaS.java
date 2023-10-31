@@ -69,7 +69,6 @@ public class ZyyFaaS {
     public static void run(Integer sid) {
         System.out.println("毕设" + AbstractJobDriver.FuncName[sid - 1]);
         ConfigPara.invokeTime[sid - 1]++;
-        //cost[sid - 1] = ConfigPara.invokeTime[sid - 1] * ConfigPara.initTime[sid - 1] / ConfigPara.funcCapacity[sid - 1];
         if(ConfigPara.funcFlagArray[sid - 1] == 0) { //若没有预热容器则需要进行冷启动
             if(ConfigPara.funcCapacity[sid - 1] > ConfigPara.getRemainMemCapacity()) {
                 int kp = 0;
@@ -102,6 +101,7 @@ public class ZyyFaaS {
                         min = cost;
                         bestList.clear();
                         bestList.addAll(list1);
+
                     }
                 }
                 for (int i = 0; i < ConfigPara.funcFlagArray.length; i++) {

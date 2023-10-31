@@ -1,6 +1,7 @@
 package scs.controller;
 
 import org.apache.http.impl.client.CloseableHttpClient;
+import scs.util.loadGen.driver.JobExec;
 import scs.util.loadGen.threads.FunctionExec;
 import scs.util.repository.Repository;
 import scs.util.tools.HttpClientPool;
@@ -55,15 +56,13 @@ public class OperWaitQueue {
     }
 
     public static void execFuncHybrid(Integer sid){
-//        if(ConfigPara.funcFlagArray[sid-1] == 0) {
-//            ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() - ConfigPara.funcCapacity[sid - 1]);
-//            System.out.println("目前大小：" + ConfigPara.getRemainMemCapacity());
-//        }
         Repository.loaderMap.get(sid).getAbstractJobDriver().exec(sid);
     }
 
     public static void execFuncZyy(Integer sid){
-        Repository.loaderMap.get(sid).getAbstractJobDriver().ZyyExec(sid);
+        JobExec jobExec = new JobExec();
+        jobExec.ZyyExec(sid);
+        //Repository.loaderMap.get(sid).getAbstractJobDriver().ZyyExec(sid);
     }
 
     public static void releaseFunc(Integer sid) {

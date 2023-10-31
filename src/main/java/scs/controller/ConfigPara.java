@@ -23,18 +23,28 @@ public class ConfigPara {
     public static Double[] costNum;
 
     /*********
-        When functions are running at memory and the remaining memory capacity cannot support to response other functions,
-        the functions are added into the waitQueue. Therefore, the waitQueue stores ids of waiting functions.
-    ********/
+     When functions are running at memory and the remaining memory capacity cannot support to response other functions,
+     the functions are added into the waitQueue. Therefore, the waitQueue stores ids of waiting functions.
+     ********/
     public static Queue<Integer> waitQueue;
 
     /********
-        This array records the state of each function.
-        0: not initial;
-        1: keep-alive;
-        2: running.
-    ********/
+     This array records the state of each function.
+     0: not initial;
+     1: keep-alive;
+     2: running.
+     ********/
     public static Integer[] funcFlagArray;
+
+    public static String[] funcName;
+
+    public static Long[] firstTime;
+    public static boolean[] start;
+    public static Integer[] coldStartTime;
+    public static Long[] oldTime;
+    public static Long[] nowTime;
+    public static double[] preWarm;
+    public static double[] keepAlive;
 
     public ConfigPara() {
         maxFuncCapacity = 120.5;
@@ -50,6 +60,14 @@ public class ConfigPara {
         invokeTime = new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
         costNum = new Double[]{0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+        funcName = new String[]{"mandelbrot"};
+        firstTime = new Long[100];
+        start = new boolean[100];
+        coldStartTime = new Integer[100];
+        oldTime = new Long[100];
+        nowTime = new Long[100];
+        preWarm = new double[100];
+        keepAlive = new double[100];
     }
 
     public static void setMemoryCapacity(Double currFuncCapacity1) {

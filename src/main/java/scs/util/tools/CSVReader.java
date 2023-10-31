@@ -30,7 +30,7 @@ public class CSVReader {
  
     public List<Map.Entry<String, ArrayList<Integer>>> getAzure() {
 
-        String csvFile = "/home/dmy/azureFunction/invocations_per_function_md.anon.d01.csv";
+        String csvFile = "/home/zyy/invocations_per_function_md.anon.d01.csv";
         String line = "";
         String cvsSplitBy = ",";
         Map<String,ArrayList<Integer>> InvokeMap = new HashMap<>();
@@ -70,7 +70,7 @@ public class CSVReader {
     }
 
     public Map<String,ArrayList<Integer>> getAzureTest() {
-        String csvFile = "/home/dmy/azureFunction/invocations_per_function_md.anon.d01.csv";
+        String csvFile = "/home/zyy/invocations_per_function_md.anon.d01.csv";
         String line = "";
         String cvsSplitBy = ",";
         Map<String,ArrayList<Integer>> InvokeMap = new HashMap<>();
