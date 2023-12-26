@@ -46,28 +46,35 @@ public class ConfigPara {
     public static double[] preWarm;
     public static double[] keepAlive;
 
+
     public ConfigPara() {
         maxFuncCapacity = 120.5;
         minFuncCapacity = 10.6;
         currFuncCapacity = 60.0;
-        funcCapacity = new Double[]{7.3, 6.1, 6.5, 5.7, 7.8, 9.0, 8.5,10.6,5.4,7.1,6.6,8.1,9.2,8.0,7.2,10.4};
+        funcCapacity = new Double[300];
 
-        kpArray = new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        funcFlagArray = new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        kpArray = new Integer[300];
+        funcFlagArray = new Integer[300];
         waitQueue = new LinkedList<>();
 
-        initTime = new Double[]{1.7,2.2,2.5,3.1,2.9,3.5,2.0,1.7,2.2,2.5,3.1,2.9,3.5,2.0,1.7,2.8};
-        invokeTime = new Integer[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        initTime = new Double[300];
+        invokeTime = new Integer[300];
 
-        costNum = new Double[]{0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
-        funcName = new String[]{"mandelbrot"};
-        firstTime = new Long[100];
-        start = new boolean[100];
-        coldStartTime = new Integer[100];
-        oldTime = new Long[100];
-        nowTime = new Long[100];
-        preWarm = new double[100];
-        keepAlive = new double[100];
+        costNum = new Double[300];
+        funcName = new String[300];
+        firstTime = new Long[300];
+        start = new boolean[300];
+        coldStartTime = new Integer[300];
+        oldTime = new Long[300];
+        nowTime = new Long[300];
+        preWarm = new double[300];
+        keepAlive = new double[300];
+        for(int i=0;i<300;i++)
+        {
+            funcCapacity[i] = 100.0;
+            initTime[i] = 1.0 + (i%5)*0.2;
+            funcName[i] = "func" + i;
+        }
     }
 
     public static void setMemoryCapacity(Double currFuncCapacity1) {

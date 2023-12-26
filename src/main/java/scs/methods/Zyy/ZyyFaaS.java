@@ -101,7 +101,6 @@ public class ZyyFaaS {
                         min = cost;
                         bestList.clear();
                         bestList.addAll(list1);
-
                     }
                 }
                 for (int i = 0; i < ConfigPara.funcFlagArray.length; i++) {

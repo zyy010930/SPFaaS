@@ -318,20 +318,5 @@ public class HttpClientPool {
 			
 			System.out.println(instance.postResponseTimeHtml(httpClient, queryItemsStr, jsonParmStr.replace("x","23")));
 		}
-		
-		
-		 
-
 	}
-	////		String url="https://1202130895179290.cn-beijing.fc.aliyuncs.com/2016-08-15/proxy/_FUN_NAS_poetry/fun-nas-function/";
-	////		for (int i=0;i<100;i++){
-	////			try {
-	////				Thread.sleep(1000);
-	////			} catch (InterruptedException e) {
-	////				// TODO Auto-generated catch block
-	////				e.printStackTrace();
-	////			}
-	////			System.out.println(instance.getResponseTime(httpClient, url));
-	////		}
-
 }

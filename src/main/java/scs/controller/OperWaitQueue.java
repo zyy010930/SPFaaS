@@ -20,7 +20,7 @@ import java.util.Queue;
  * @Version 1.0
  */
 public class OperWaitQueue {
-    private static SSHTool tool1 = new SSHTool("192.168.1.4", "root", "wnlof309b507", StandardCharsets.UTF_8);
+    private static SSHTool tool1 = new SSHTool("192.168.1.7", "root", "wnlof309b507", StandardCharsets.UTF_8);
 
     public static void execQueueFunc() {
         if(ConfigPara.waitQueue.size() != 0) {
@@ -66,58 +66,10 @@ public class OperWaitQueue {
     }
 
     public static void releaseFunc(Integer sid) {
-        switch (sid){
-            case 1:
-                //System.out.println(tool1.exec("bash /home/zyy/INFless/developer/servingFunctions/resnet-50.sh"));
-                ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[sid-1]);
-                ConfigPara.funcFlagArray[sid-1] = 0;
-                break;
-            case 2:
-                //System.out.println(tool1.exec("bash /home/zyy/INFless/developer/servingFunctions/mobilenet.sh"));
-                ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[sid-1]);
-                ConfigPara.funcFlagArray[sid-1] = 0;
-                break;
-            case 3:
-                //System.out.println(tool1.exec("bash /home/zyy/BurstyServerlessBenchmark/DIC/WebServices/openfaas/python-code/hash.sh"));
-                ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[sid-1]);
-                ConfigPara.funcFlagArray[sid-1] = 0;
-                break;
-            case 4:
-                //System.out.println(tool1.exec("bash /home/zyy/BurstyServerlessBenchmark/DIC/WebServices/openfaas/python-code/Md5.sh"));
-                ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[sid-1]);
-                ConfigPara.funcFlagArray[sid-1] = 0;
-                break;
-            case 5:
-                //System.out.println(tool1.exec("bash /home/zyy/BurstyServerlessBenchmark/DIC/WebServices/openfaas/python-code/hello.sh"));
-                ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[sid-1]);
-                ConfigPara.funcFlagArray[sid-1] = 0;
-                break;
-            case 6:
-                //System.out.println(tool1.exec("bash /home/zyy/BurstyServerlessBenchmark/DIC/WebServices/openfaas/python-code/sort.sh"));
-                ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[sid-1]);
-                ConfigPara.funcFlagArray[sid-1] = 0;
-                break;
-            case 7:
-                //System.out.println(tool1.exec("bash /home/zyy/BurstyServerlessBenchmark/DIC/WebServices/openfaas/python-code/cryptography.sh"));
-                ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[sid-1]);
-                ConfigPara.funcFlagArray[sid-1] = 0;
-                break;
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-                //System.out.println(tool1.exec("bash /home/zyy/test.sh"));
-                ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[sid-1]);
-                ConfigPara.funcFlagArray[sid-1] = 0;
-                break;
-            default:
-                System.out.println("Function Release Error!");
-        }
+        CloseableHttpClient httpClient;
+        String url = "http://192.168.1.7:31112/function/func"+sid;
+        httpClient= HttpClientPool.getInstance().getConnection();
+        //HttpClientPool.getResponseTime(httpClient,url);
     }
 
     public void deleteQueueNode(Queue<Integer> Q, Integer sid) {

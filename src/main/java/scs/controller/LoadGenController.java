@@ -37,26 +37,6 @@ import scs.util.tools.HttpClientPool;
 public class LoadGenController {
 	private DataFormats dataFormat=DataFormats.getInstance();
 	private Repository instance=Repository.getInstance();
-	private static Map<Integer,Integer> mp;
-	{
-		mp = new HashMap<Integer, Integer>();
-		mp.put(1, 1);
-		mp.put(2, 2);
-		mp.put(3, 3);
-		mp.put(4, 4);
-		mp.put(5, 5);
-		mp.put(6, 6);
-		mp.put(7, 7);
-		mp.put(8, 8);
-		mp.put(9, 9);
-		mp.put(10, 10);
-		mp.put(11, 11);
-		mp.put(12, 12);
-		mp.put(13, 13);
-		mp.put(14, 14);
-		mp.put(15, 15);
-		mp.put(16, 16);
-	}
 
 	private ArrayList<Map<Integer,Integer>> functionList = new ArrayList<Map<Integer, Integer>>();
 	/**
@@ -75,10 +55,10 @@ public class LoadGenController {
 
 			//Setting Memory Capacity
 			ConfigPara configPara = new ConfigPara();
-			configPara.setMemoryCapacity(60.0);
+			ConfigPara.setMemoryCapacity(3000.0);
 			System.out.println("start thread");
-			ExecutorService executor = Executors.newFixedThreadPool(1);
-			for(int i = 1;i<=1;i++)
+			ExecutorService executor = Executors.newFixedThreadPool(300);
+			for(int i = 1;i <= 300;i++)
 			{
 				FunctionThread thread = new FunctionThread(i, funcMap.get(i));
 				executor.execute(thread);
@@ -89,10 +69,6 @@ public class LoadGenController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-	}
-
-	public static Map<Integer,Integer> getMp() {
-		return mp;
 	}
 
 	/**
@@ -319,7 +295,7 @@ public class LoadGenController {
 					throw new RuntimeException(e);
 				}
 				double d = 0;
-				for(int j = 0;j < ConfigPara.funcFlagArray.length; j++)
+				for(int j = 0;j < 300; j++)
 				{
 					if(ConfigPara.funcFlagArray[j] != 0)
 					{
@@ -328,9 +304,9 @@ public class LoadGenController {
 				}
 				list.add(d);
 				System.out.println("将内存数据载入list,list长度:" + list.size() + " size:" + d);
-				if((60.0 - d) != ConfigPara.getRemainMemCapacity())
+				if((3000.0 - d) != ConfigPara.getRemainMemCapacity())
 				{
-					ConfigPara.setMemoryCapacity(60.0 - d);
+					ConfigPara.setMemoryCapacity(3000.0 - d);
 				}
 			}
 			for(int i = 0;i < list.size(); i++) {

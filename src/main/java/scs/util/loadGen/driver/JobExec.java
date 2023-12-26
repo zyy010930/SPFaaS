@@ -16,8 +16,11 @@ public class JobExec {
 
     public void ZyyExec(int serviceId)
     {
+        CloseableHttpClient httpClient;
+        String url = "http://192.168.1.7:31112/function/func"+serviceId;
+        String url0 = "http://192.168.1.7:31112/zero/func"+serviceId;
+        httpClient= HttpClientPool.getInstance().getConnection();
         System.out.println(ConfigPara.funcName[serviceId-1] + " request");
-        //FunctionExec functionExec = new FunctionExec(httpClient, queryItemsStr, serviceId, jsonParmStr, sleepUnit, "POST");
 
         if(ConfigPara.firstTime[serviceId-1] == 0){
             ConfigPara.firstTime[serviceId-1] = new Date().getTime();
@@ -29,6 +32,7 @@ public class JobExec {
             ConfigPara.funcFlagArray[serviceId-1] = 2;
             ConfigPara.coldStartTime[serviceId-1]++;
             //System.out.println(tool.exec(createCmd[serviceId-1]));
+            //HttpClientPool.getResponseTime(httpClient, url);
             System.out.println(ConfigPara.funcName[serviceId-1] + " cold start time is " + ConfigPara.coldStartTime[serviceId-1]);
         }
         else
@@ -53,18 +57,8 @@ public class JobExec {
             ConfigPara.keepAlive[serviceId-1] = 1200000.0;
         }
 
-        //ConfigPara.kpArray[serviceId-1] = (int)keepAlive;        //Setting the keep-alive
-        //ConfigPara.funcFlagArray[serviceId-1] = 2;
-        CloseableHttpClient httpClient;
-        String queryItemsStr = Repository.HashFaasBaseURL;
-        String jsonParmStr;
-        httpClient= HttpClientPool.getInstance().getConnection();
-        jsonParmStr=Repository.resNet50ParmStr;
-        queryItemsStr=queryItemsStr.replace("Ip","192.168.1.7");
-        queryItemsStr=queryItemsStr.replace("Port","31112");
-        queryItemsStr=queryItemsStr.replace("Hash",ConfigPara.funcName[serviceId-1]);
-        int time= HttpClientPool.postResponseTime(httpClient, queryItemsStr, jsonParmStr);
-        System.out.println(time);
+        //int time= HttpClientPool.getResponseTime(httpClient, url);
+        //System.out.println(time);
         //ConfigPara.funcFlagArray[serviceId-1] = 1;
         ConfigPara.invokeTime[serviceId-1]++;
         System.out.println(ConfigPara.funcName[serviceId-1] + " Invoke time is " + ConfigPara.invokeTime[serviceId-1] + ", cold start time is " + ConfigPara.coldStartTime[serviceId-1] + ", cold start rate is " + ((double)ConfigPara.coldStartTime[serviceId-1]/ConfigPara.invokeTime[serviceId-1])*100.0 + "%, preWarm time is " + ConfigPara.preWarm[serviceId-1] + ", keepAive time is " + ConfigPara.keepAlive[serviceId-1]);
@@ -127,6 +121,7 @@ public class JobExec {
                                 if(bestList.contains(i)) {
                                     System.out.println(i + "-----------release-----------");
                                     //System.out.println(tool.exec(deleteCmd[i]));
+                                    //HttpClientPool.getResponseTime(httpClient, url0);
                                     ConfigPara.funcFlagArray[i] = 0;
                                     ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[i]);
                                 }
@@ -134,6 +129,7 @@ public class JobExec {
                         }
                         ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() - ConfigPara.funcCapacity[serviceId-1]);
                         ConfigPara.funcFlagArray[serviceId - 1] = 1;
+                        //HttpClientPool.getResponseTime(httpClient, url);
                         //System.out.println(tool.exec(createCmd[serviceId-1]));
                     }
                 }
@@ -153,17 +149,10 @@ public class JobExec {
                 System.out.println("delete start!!!!!!!!! " + ConfigPara.funcFlagArray[serviceId-1]);
                 if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime)
                 {
-//						try {
-//							ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[serviceId-1]);
-//							ConfigPara.funcFlagArray[serviceId-1] = 0;
-//							System.out.println(FuncName[serviceId-1] + " keepAlive over. keepalive is " + keepAlive);
-//							System.out.println(tool.exec(deleteCmd[serviceId-1]));
-//						} catch (IOException e) {
-//							e.printStackTrace();
-//						}
                     ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[serviceId-1]);
                     ConfigPara.funcFlagArray[serviceId-1] = 0;
                     System.out.println(ConfigPara.funcName[serviceId-1] + " keepAlive over. keepalive is " + ConfigPara.keepAlive[serviceId-1]);
+                    //HttpClientPool.getResponseTime(httpClient, url0);
                 }
             }
         };

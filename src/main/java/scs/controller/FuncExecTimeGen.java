@@ -30,7 +30,7 @@ public class FuncExecTimeGen {
         System.out.println("Invoke Map Build------");
         Map<Integer,ArrayList<Integer>> InvokeMap = functionRequest.getMap(0,list); //obtain 7 groups records */
 
-        Map<String,ArrayList<Integer>> mp = reader.getAzureTest();
+        Map<Integer,ArrayList<Integer>> mp = reader.getAzureTest();
         System.out.println("build request!!!!!!!");
         FunctionRequest functionRequest = new FunctionRequest();
         System.out.println("Invoke Map Build------");
@@ -41,7 +41,7 @@ public class FuncExecTimeGen {
         System.out.println("Arima read------");
 
         Map<Integer,ArrayList<Integer>> funcMap = new TreeMap<>();
-        for(int i = 1; i <= 16; i++)
+        for(int i = 1; i <= 300; i++)
         {
             ArrayList<Integer> timeList = new ArrayList<>();
 
@@ -72,7 +72,7 @@ public class FuncExecTimeGen {
                     lastIndex = 0;
                 }
             }
-            funcMap.put(LoadGenController.getMp().get(i), timeList);
+            funcMap.put(i, timeList);
         }
         return funcMap;
     }
