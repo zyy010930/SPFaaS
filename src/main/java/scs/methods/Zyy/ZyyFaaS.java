@@ -67,7 +67,7 @@ public class ZyyFaaS {
     }
 
     public static void run(Integer sid) {
-        System.out.println("毕设" + AbstractJobDriver.FuncName[sid - 1]);
+        System.out.println("毕设" + ConfigPara.funcName[sid - 1]);
         ConfigPara.invokeTime[sid - 1]++;
         if(ConfigPara.funcFlagArray[sid - 1] == 0) { //若没有预热容器则需要进行冷启动
             if(ConfigPara.funcCapacity[sid - 1] > ConfigPara.getRemainMemCapacity()) {
