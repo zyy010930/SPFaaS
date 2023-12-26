@@ -13,7 +13,6 @@ import java.util.Queue;
  */
 public class ConfigPara {
     private static Double maxFuncCapacity;      //The maximum memory capacity storing functions
-    private static Double minFuncCapacity;      //The minimum memory capacity storing functions
     private static Double currFuncCapacity;     //The current remaining memory capacity storing functions
     public static Double[] funcCapacity;        //The sizes of functions
     public static Integer[] kpArray;            //This array records the keep-alive time for functions
@@ -48,9 +47,8 @@ public class ConfigPara {
 
 
     public ConfigPara() {
-        maxFuncCapacity = 120.5;
-        minFuncCapacity = 10.6;
-        currFuncCapacity = 60.0;
+        maxFuncCapacity = 3000.0;
+        currFuncCapacity = 0.0;
         funcCapacity = new Double[300];
 
         kpArray = new Integer[300];
@@ -74,11 +72,22 @@ public class ConfigPara {
             funcCapacity[i] = 100.0;
             initTime[i] = 1.0 + (i%5)*0.2;
             funcName[i] = "func" + i;
+            kpArray[i] = 0;
+            funcFlagArray[i] = 0;
+            invokeTime[i] = 0;
+            costNum[i] = 0.0;
+            firstTime[i] = 0L;
+            start[i] = false;
+            coldStartTime[i] = 0;
+            oldTime[i]= 0L;
+            nowTime[i]= 0L;
+            preWarm[i] = 0.0;
+            keepAlive[i] = 0.0;
         }
     }
 
     public static void setMemoryCapacity(Double currFuncCapacity1) {
-        if(currFuncCapacity1 < maxFuncCapacity && currFuncCapacity1 >= 0) {
+        if(currFuncCapacity1 <= maxFuncCapacity && currFuncCapacity1 >= 0) {
             currFuncCapacity = currFuncCapacity1;
         }
         else{
