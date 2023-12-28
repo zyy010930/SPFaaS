@@ -26,17 +26,16 @@ public class JobExec {
             ConfigPara.firstTime[serviceId-1] = new Date().getTime();
         }
         if(ConfigPara.funcFlagArray[serviceId-1] == 0) {
-            System.out.println("目前大小：" + ConfigPara.getRemainMemCapacity());
-            ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() - ConfigPara.funcCapacity[serviceId - 1]);
-            System.out.println("目前大小：" + ConfigPara.getRemainMemCapacity());
             ConfigPara.funcFlagArray[serviceId-1] = 2;
             ConfigPara.coldStartTime[serviceId-1]++;
-            //System.out.println(tool.exec(createCmd[serviceId-1]));
+            System.out.println("目前大小：" + ConfigPara.getRemainMemCapacity());
             //HttpClientPool.getResponseTime(httpClient, url);
             System.out.println(ConfigPara.funcName[serviceId-1] + " cold start time is " + ConfigPara.coldStartTime[serviceId-1]);
         }
-        else
-            ConfigPara.funcFlagArray[serviceId-1] = 2;
+        else {
+            ConfigPara.funcFlagArray[serviceId - 1] = 2;
+            System.out.println("目前大小：" + ConfigPara.getRemainMemCapacity());
+        }
 
         if(!ConfigPara.start[serviceId-1])
         {
@@ -54,8 +53,8 @@ public class JobExec {
                     ConfigPara.preWarm[serviceId-1] = (i - intervalTime - 1) * 1000.0;
                 }
             }
-            ConfigPara.keepAlive[serviceId-1] = 1200000.0;
         }
+        ConfigPara.keepAlive[serviceId-1] = 600000.0;
 
         //int time= HttpClientPool.getResponseTime(httpClient, url);
         //System.out.println(time);
@@ -78,57 +77,11 @@ public class JobExec {
                         FunctionList.funcMap.put(serviceId, true);
                         System.out.println(ConfigPara.funcName[serviceId-1] + " prewarm now. pre-warm is " + ConfigPara.preWarm[serviceId-1]);
                         if(ConfigPara.funcCapacity[serviceId - 1] > ConfigPara.getRemainMemCapacity()) {
-                            int kp = 0;
-                            int invoke = 0;
-                            for(int j=0;j<ConfigPara.funcFlagArray.length;j++)
-                            {
-                                if(ConfigPara.invokeTime[j]>invoke)
-                                {
-                                    invoke = ConfigPara.invokeTime[j];
-                                }
-                                if(ConfigPara.kpArray[j]>kp)
-                                {
-                                    kp = ConfigPara.kpArray[j];
-                                }
-                            }
-                            for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
-                            {
-                                ConfigPara.costNum[i] = 0.5*(ConfigPara.invokeTime[i]/invoke) + 0.5*(ConfigPara.kpArray[i]/kp); //计算每个函数容器的释放代价
-                            }
-
-                            Double min = Double.MAX_VALUE;
-                            Set<Integer> bestList = new HashSet<>();
-                            for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
-                            {
-                                double cost = 0.0;
-                                Set<Integer> list = new HashSet<>();
-                                Map<Set<Integer>,Double> mp1 = new HashMap<>();
-                                mp1 = DFSFunction(list,i,ConfigPara.funcCapacity[serviceId - 1],ConfigPara.costNum[i]);
-                                Set<Integer> list1 = new HashSet<>();
-                                for (Map.Entry<Set<Integer>,Double> entry : mp1.entrySet()) {
-                                    cost = entry.getValue();
-                                    list.addAll(entry.getKey());
-                                }
-                                if(cost < min)
-                                {
-                                    min = cost;
-                                    bestList.clear();
-                                    bestList.addAll(list1);
-                                }
-                            }
-                            for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
-                            {
-                                if(bestList.contains(i)) {
-                                    System.out.println(i + "-----------release-----------");
-                                    //System.out.println(tool.exec(deleteCmd[i]));
-                                    //HttpClientPool.getResponseTime(httpClient, url0);
-                                    ConfigPara.funcFlagArray[i] = 0;
-                                    ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[i]);
-                                }
-                            }
+                            ConfigPara.containerRelease(serviceId); //替换容器
                         }
-                        ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() - ConfigPara.funcCapacity[serviceId-1]);
+                        //ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() - ConfigPara.funcCapacity[serviceId-1]);
                         ConfigPara.funcFlagArray[serviceId - 1] = 1;
+                        ConfigPara.getRemainMemCapacity();
                         //HttpClientPool.getResponseTime(httpClient, url);
                         //System.out.println(tool.exec(createCmd[serviceId-1]));
                     }
@@ -147,10 +100,11 @@ public class JobExec {
             public void run() {
                 Date now = new Date();
                 System.out.println("delete start!!!!!!!!! " + ConfigPara.funcFlagArray[serviceId-1]);
-                if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime)
+                if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime) //如果期间没有新的调用，就直接释放
                 {
-                    ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[serviceId-1]);
+                    //ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[serviceId-1]);
                     ConfigPara.funcFlagArray[serviceId-1] = 0;
+                    ConfigPara.getRemainMemCapacity();
                     System.out.println(ConfigPara.funcName[serviceId-1] + " keepAlive over. keepalive is " + ConfigPara.keepAlive[serviceId-1]);
                     //HttpClientPool.getResponseTime(httpClient, url0);
                 }

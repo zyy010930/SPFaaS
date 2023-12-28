@@ -1,8 +1,8 @@
 package scs.controller;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
+
+import static scs.methods.Zyy.ZyyFaaS.DFSFunction;
 
 /**
  * @ClassName ConfigPara
@@ -95,8 +95,67 @@ public class ConfigPara {
         }
     }
 
-    public static Double getRemainMemCapacity(){
+    public static synchronized Double getRemainMemCapacity(){
+        double capacity = 0.0;
+        for(int i=0;i<300;i++)
+        {
+            if(ConfigPara.funcFlagArray[i] != 0)
+            {
+                capacity+=ConfigPara.funcCapacity[i];
+            }
+        }
+        currFuncCapacity = maxFuncCapacity - capacity;
         return currFuncCapacity;
+    }
+
+    public static synchronized void containerRelease(Integer serviceId){
+        int kp = 0;
+        int invoke = 0;
+        for(int j=0;j<ConfigPara.funcFlagArray.length;j++)
+        {
+            if(ConfigPara.invokeTime[j]>invoke)
+            {
+                invoke = ConfigPara.invokeTime[j];
+            }
+            if(ConfigPara.kpArray[j]>kp)
+            {
+                kp = ConfigPara.kpArray[j];
+            }
+        }
+        for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
+        {
+            ConfigPara.costNum[i] = 0.5*(ConfigPara.invokeTime[i]/invoke) + 0.5*(ConfigPara.kpArray[i]/kp); //计算每个函数容器的释放代价
+        }
+
+        Double min = Double.MAX_VALUE;
+        Set<Integer> bestList = new HashSet<>();
+        for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
+        {
+            double cost = 0.0;
+            Set<Integer> list = new HashSet<>();
+            Map<Set<Integer>,Double> mp1 = new HashMap<>();
+            mp1 = DFSFunction(list,i,ConfigPara.funcCapacity[serviceId - 1],ConfigPara.costNum[i]);
+            Set<Integer> list1 = new HashSet<>();
+            for (Map.Entry<Set<Integer>,Double> entry : mp1.entrySet()) {
+                cost = entry.getValue();
+                list.addAll(entry.getKey());
+            }
+            if(cost < min)
+            {
+                min = cost;
+                bestList.clear();
+                bestList.addAll(list1);
+            }
+        }
+        for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
+        {
+            if(bestList.contains(i)) {
+                System.out.println(i + "-----------release-----------");
+                ConfigPara.funcFlagArray[i] = 0;
+
+                ConfigPara.getRemainMemCapacity();
+            }
+        }
     }
 }
 

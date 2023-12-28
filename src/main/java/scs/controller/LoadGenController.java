@@ -22,6 +22,7 @@ import scs.pojo.PageQueryData;
 import scs.pojo.QueryData;
 import scs.util.format.DataFormats;
 import scs.util.repository.Repository;
+import scs.util.tools.ARIMAReader;
 import scs.util.tools.HttpClientPool;
 
 /**
@@ -55,7 +56,7 @@ public class LoadGenController {
 
 			//Setting Memory Capacity
 			ConfigPara configPara = new ConfigPara();
-			ConfigPara.setMemoryCapacity(3000.0);
+			ConfigPara.setMemoryCapacity(30000.0);
 			System.out.println("start thread");
 			ExecutorService executor = Executors.newFixedThreadPool(300);
 			for(int i = 1;i <= 300;i++)
@@ -238,6 +239,10 @@ public class LoadGenController {
 
 		public void run(){
 			System.out.println("new start");
+			PreWarmThread thread = new PreWarmThread(serviceId);
+			ExecutorService executorService = Executors.newFixedThreadPool(1);
+			executorService.execute(thread);
+			executorService.shutdown();
 			for(Integer time : this.list)
 			{
 				System.out.println("function:" + serviceId + "sleep:" + time);
@@ -250,6 +255,34 @@ public class LoadGenController {
 				ExecutorService executor = Executors.newFixedThreadPool(1);
 				executor.execute(runThread);
 				executor.shutdown();
+			}
+		}
+	}
+
+	static class PreWarmThread extends Thread {
+		private Integer serviceId;
+		public PreWarmThread(Integer id) {
+			this.serviceId = id;
+		}
+
+		public void run() {
+			ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
+			for(Integer i : list)
+			{
+				if(i == 1 && ConfigPara.funcFlagArray[serviceId-1] == 0)
+				{
+					System.out.println(ConfigPara.funcName[serviceId-1] + " prewarm now. pre-warm is " + ConfigPara.preWarm[serviceId-1]);
+					if(ConfigPara.funcCapacity[serviceId - 1] > ConfigPara.getRemainMemCapacity()) {
+						ConfigPara.containerRelease(serviceId); //替换容器
+					}
+					ConfigPara.funcFlagArray[serviceId - 1] = 1;
+					ConfigPara.getRemainMemCapacity();
+				}
+				try {
+					Thread.sleep(60000);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		}
 	}
@@ -304,9 +337,9 @@ public class LoadGenController {
 				}
 				list.add(d);
 				System.out.println("将内存数据载入list,list长度:" + list.size() + " size:" + d);
-				if((3000.0 - d) != ConfigPara.getRemainMemCapacity())
+				if((30000.0 - d) != ConfigPara.getRemainMemCapacity())
 				{
-					ConfigPara.setMemoryCapacity(3000.0 - d);
+					ConfigPara.setMemoryCapacity(30000.0 - d);
 				}
 			}
 			for(int i = 0;i < list.size(); i++) {
