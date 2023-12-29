@@ -24,7 +24,7 @@ public class ZyyFaaS {
         for(int i = 0; i < 300; i++)
         {
             if(ConfigPara.funcFlagArray[i] != 0)
-                System.out.println(AbstractJobDriver.FuncName[i]);
+                System.out.println(ConfigPara.funcName[i]);
         }
         System.out.println("------内存:" + ConfigPara.getRemainMemCapacity() + "-----");
     }
