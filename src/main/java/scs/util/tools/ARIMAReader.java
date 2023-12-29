@@ -89,7 +89,7 @@ public class ARIMAReader {
                 for (int i = 0; i < country.length; i++) {
                     list.add(Integer.parseInt(country[i]));
                 }
-                predictList.put(num, list);
+                SPFaaSList.put(num, list);
                 num++;
             }
         } catch (IOException e) {
