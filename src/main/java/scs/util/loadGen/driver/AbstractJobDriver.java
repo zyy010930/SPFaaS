@@ -106,10 +106,10 @@ public abstract class AbstractJobDriver {
 	 */
 	public void executeJob(int serviceId, int type)
 	{
-		int sleepUnit=1000;
+		//int sleepUnit=1000;
 		try {
-			System.out.println(FuncName[serviceId-1] + " request");
-			FunctionExec functionExec = new FunctionExec(httpClient, queryItemsStr, serviceId, jsonParmStr, sleepUnit, "POST");
+			System.out.println(ConfigPara.funcName[serviceId-1] + " request");
+			//FunctionExec functionExec = new FunctionExec(httpClient, queryItemsStr, serviceId, jsonParmStr, sleepUnit, "POST");
 
 			if(ConfigPara.funcFlagArray[serviceId-1] == 0) {
 				System.out.println("目前大小：" + ConfigPara.getRemainMemCapacity());
@@ -160,7 +160,7 @@ public abstract class AbstractJobDriver {
 						}
 						else { //样本不足或者直方图不具有代表性，pre-warm设置为0，keep-alive设置一个较长时间
 							preWarm = 0.0;
-							keepAlive = 1200000.0;
+							keepAlive = 600000.0;
 						}
 					}
 				}
@@ -169,7 +169,7 @@ public abstract class AbstractJobDriver {
 
 			ConfigPara.kpArray[serviceId-1] = (int)keepAlive;        //Setting the keep-alive
 			//ConfigPara.funcFlagArray[serviceId-1] = 2;
-			functionExec.exec();
+			//functionExec.exec();
 			//ConfigPara.funcFlagArray[serviceId-1] = 1;
 			invokeTime++;
 			System.out.println(FuncName[serviceId-1] + " Invoke time is " + invokeTime + ", cold start time is " + coldStartTime + ", cold start rate is " + ((double)coldStartTime/invokeTime)*100.0 + "%, preWarm time is " + preWarm + ", keepAive time is " + keepAlive);
