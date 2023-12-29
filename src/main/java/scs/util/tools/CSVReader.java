@@ -52,12 +52,11 @@ public class CSVReader {
     }
 
     public Map<Integer,ArrayList<Integer>> getAzureTest() {
-        String csvFile = "/home/zyy/SPFaaS_py/newData.csv";
+        String csvFile = "/home/zyy/func300.csv";
         String line = "";
         String cvsSplitBy = ",";
         Map<Integer,ArrayList<Integer>> InvokeMap = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            br.readLine();
             int num = 1;
             while ((line = br.readLine()) != null) {
 

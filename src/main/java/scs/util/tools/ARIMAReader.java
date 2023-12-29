@@ -78,7 +78,7 @@ public class ARIMAReader {
     }
 
     public void getSPFaaS() {
-        String csvFile = "/home/zyy/prewarm.csv";
+        String csvFile = "/home/zyy/func300_pre.csv";
         String line = "";
         String cvsSplitBy = ",";
         int num = 1;
