@@ -320,7 +320,7 @@ public class LoadGenController {
 				throw new RuntimeException(e);
 			}
 			ArrayList<Double> list = new ArrayList<>();
-			for(int i = 1; i <= 720; i++) //add
+			for(int i = 1; i <= 1440; i++) //add
 			{
 				try {
 					Thread.sleep(60000);
@@ -337,14 +337,24 @@ public class LoadGenController {
 				}
 				list.add(d);
 				System.out.println("将内存数据载入list,list长度:" + list.size() + " size:" + d);
-				if((30000.0 - d) != ConfigPara.getRemainMemCapacity())
-				{
-					ConfigPara.setMemoryCapacity(30000.0 - d);
-				}
+//				if((30000.0 - d) != ConfigPara.getRemainMemCapacity())
+//				{
+//					ConfigPara.setMemoryCapacity(30000.0 - d);
+//				}
 			}
 			for(int i = 0;i < list.size(); i++) {
 				System.out.println(list.get(i));
 			}
+
+			int invoke = 0;
+			int cold = 0;
+			for(int i = 0;i < 300; i++)
+			{
+				invoke += ConfigPara.invokeTime[i];
+				cold += ConfigPara.coldStartTime[i];
+				System.out.println("func"+i+" "+ConfigPara.invokeTime[i]+" "+ConfigPara.coldStartTime[i]+" "+(double)ConfigPara.coldStartTime[i]/ConfigPara.invokeTime[i]);
+			}
+			System.out.println("all function: "+(double)cold/invoke);
 		}
 	}
 }
