@@ -238,11 +238,11 @@ public class LoadGenController {
 		}
 
 		public void run(){
-			System.out.println("new start");
-			PreWarmThread thread = new PreWarmThread(serviceId);
-			ExecutorService executorService = Executors.newFixedThreadPool(1);
-			executorService.execute(thread);
-			executorService.shutdown();
+			System.out.println("new start"); //SPFaaS
+//			PreWarmThread thread = new PreWarmThread(serviceId);
+//			ExecutorService executorService = Executors.newFixedThreadPool(1);
+//			executorService.execute(thread);
+//			executorService.shutdown();
 			for(Integer time : this.list)
 			{
 				System.out.println("function:" + serviceId + "sleep:" + time);
