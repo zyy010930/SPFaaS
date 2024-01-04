@@ -52,18 +52,18 @@ public class Wild {
                 if(len >= 20 && ConfigPara.cv[serviceId-1] <= 2.0) //样本数目足够且直方图具有代表性，采用5%和99%的样本点
                 {
                     ConfigPara.preWarm[serviceId-1] = (double)ConfigPara.timeList.get(serviceId-1).get(Math.min(len - 1,((int)(len*0.05) - 1)));
-                    ConfigPara.kpArray[serviceId-1] = (int)(double)ConfigPara.timeList.get(serviceId-1).get(Math.max(0,((int)(len*0.99) - 1)));
+                    ConfigPara.keepAlive[serviceId-1] = (int)(double)ConfigPara.timeList.get(serviceId-1).get(Math.max(0,((int)(len*0.99) - 1)));
                 } else if((double)ConfigPara.outOfBound[serviceId-1]/ConfigPara.invokeTime[serviceId-1] >= 0.5)
                 {
 //						ArrayList<Double> arimaList = ARIMAReader.arimaList.get(serviceId);
 //						ConfigPara.preWarm[serviceId-1] = arimaList.get(invokeTime)*0.85;
 //						ConfigPara.kpArray[serviceId-1] = (int)(arimaList.get(invokeTime)*0.3);
                     ConfigPara.preWarm[serviceId-1] = 3600000;
-                    ConfigPara.kpArray[serviceId-1] = 600000;
+                    ConfigPara.keepAlive[serviceId-1] = 600000;
                 }
                 else { //样本不足或者直方图不具有代表性，pre-warm设置为0，keep-alive设置一个较长时间
                     ConfigPara.preWarm[serviceId-1] = 0.0;
-                    ConfigPara.kpArray[serviceId-1] = 600000;
+                    ConfigPara.keepAlive[serviceId-1] = 600000;
                 }
             }
         }
