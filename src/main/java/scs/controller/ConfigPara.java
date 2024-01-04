@@ -47,7 +47,7 @@ public class ConfigPara {
 
     public static Integer[] outOfBound;
 
-    public static ArrayList<Long>[] timeList;
+    public static ArrayList<ArrayList<Long>> timeList;
 
     public static Double[] mean;
 
@@ -80,6 +80,7 @@ public class ConfigPara {
         mean = new Double[300];
         standard = new Double[300];
         cv = new Double[300];
+        timeList = new ArrayList<>();
 
 
         for(int i=0;i<300;i++)
@@ -99,7 +100,7 @@ public class ConfigPara {
             preWarm[i] = 0.0;
             keepAlive[i] = 0.0;
             outOfBound[i] = 0;
-            timeList[i] = new ArrayList<Long>();
+            timeList.add(new ArrayList<Long>());
             mean[i] = 0.0;
             standard[i] = 0.0;
             cv[i] = 0.0;
