@@ -45,6 +45,15 @@ public class ConfigPara {
     public static double[] preWarm;
     public static double[] keepAlive;
 
+    public static Integer[] outOfBound;
+
+    public static ArrayList<Long>[] timeList;
+
+    public static Double[] mean;
+
+    public static Double[] standard;
+
+    public static Double[] cv;
 
     public ConfigPara() {
         maxFuncCapacity = 30000.0;
@@ -67,6 +76,12 @@ public class ConfigPara {
         nowTime = new Long[300];
         preWarm = new double[300];
         keepAlive = new double[300];
+        outOfBound = new Integer[300];
+        mean = new Double[300];
+        standard = new Double[300];
+        cv = new Double[300];
+
+
         for(int i=0;i<300;i++)
         {
             funcCapacity[i] = 100.0;
@@ -83,6 +98,11 @@ public class ConfigPara {
             nowTime[i]= 0L;
             preWarm[i] = 0.0;
             keepAlive[i] = 0.0;
+            outOfBound[i] = 0;
+            timeList[i] = new ArrayList<Long>();
+            mean[i] = 0.0;
+            standard[i] = 0.0;
+            cv[i] = 0.0;
         }
     }
 

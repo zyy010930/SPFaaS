@@ -107,126 +107,108 @@ public abstract class AbstractJobDriver {
 	public void executeJob(int serviceId, int type)
 	{
 		//int sleepUnit=1000;
-		try {
-			System.out.println(ConfigPara.funcName[serviceId-1] + " request");
-			//FunctionExec functionExec = new FunctionExec(httpClient, queryItemsStr, serviceId, jsonParmStr, sleepUnit, "POST");
+		System.out.println(ConfigPara.funcName[serviceId-1] + " request");
+		//FunctionExec functionExec = new FunctionExec(httpClient, queryItemsStr, serviceId, jsonParmStr, sleepUnit, "POST");
 
-			if(ConfigPara.funcFlagArray[serviceId-1] == 0) {
-				System.out.println("目前大小：" + ConfigPara.getRemainMemCapacity());
-				ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() - ConfigPara.funcCapacity[serviceId - 1]);
-				System.out.println("目前大小：" + ConfigPara.getRemainMemCapacity());
-				ConfigPara.funcFlagArray[serviceId-1] = 2;
-				coldStartTime++;
-				System.out.println(tool.exec(createCmd[serviceId-1]));
-				System.out.println(FuncName[serviceId-1] + " cold start time is " + coldStartTime);
-			}
-			else
-				ConfigPara.funcFlagArray[serviceId-1] = 2;
+		if(ConfigPara.funcFlagArray[serviceId-1] == 0) {
+			ConfigPara.getRemainMemCapacity();
+			ConfigPara.funcFlagArray[serviceId-1] = 2;
+			ConfigPara.coldStartTime[serviceId-1]++;
+//				System.out.println(tool.exec(createCmd[serviceId-1]));
+			System.out.println(ConfigPara.funcName[serviceId-1] + " cold start time is " + ConfigPara.coldStartTime[serviceId-1]);
+		}
+		else
+			ConfigPara.funcFlagArray[serviceId-1] = 2;
 
-			if(type == 3)
+		if(type == 3)
+		{
+			if(!ConfigPara.start[serviceId-1])
 			{
-				if(start == false)
+				ConfigPara.oldTime[serviceId-1] = new Date().getTime();
+				ConfigPara.start[serviceId-1] = true;
+			}else {
+				long nowTime = new Date().getTime();
+				long t = nowTime - ConfigPara.oldTime[serviceId-1];
+				if(t >= 7200000)
 				{
-					oldTime = new Date().getTime();
-					start = true;
-				}else {
-					long nowTime = new Date().getTime();
-					System.out.println("now:" + nowTime + " ,old:" + oldTime);
-					long t = nowTime - oldTime;
-					if(t >= 7200000)
+					ConfigPara.outOfBound[serviceId-1]++;
+				}
+				ConfigPara.timeList[serviceId-1].add(t);
+				ConfigPara.oldTime[serviceId-1] = nowTime;
+				if(ConfigPara.mean[serviceId-1] == 0)
+				{
+					ConfigPara.mean[serviceId-1] = (double)t;
+				}else{
+					int len = ConfigPara.timeList[serviceId-1].size();
+					double oldMean = ConfigPara.mean[serviceId-1];
+					int invokeTime = ConfigPara.invokeTime[serviceId-1];
+					ConfigPara.mean[serviceId-1] = oldMean + ((double)t - oldMean)/len;
+					ConfigPara.standard[serviceId-1] = ConfigPara.standard[serviceId-1] + (t - oldMean)*(t - ConfigPara.mean[serviceId-1]);
+					ConfigPara.cv[serviceId-1] = ConfigPara.standard[serviceId-1]/ConfigPara.mean[serviceId-1]/60000.0/ConfigPara.invokeTime[serviceId-1];
+
+					if(len >= 20 && ConfigPara.cv[serviceId-1] <= 2.0) //样本数目足够且直方图具有代表性，采用5%和99%的样本点
 					{
-						outOfBoundTime++;
+						ConfigPara.preWarm[serviceId-1] = (double)ConfigPara.timeList[serviceId-1].get(Math.min(len - 1,((int)(len*0.05) - 1)));
+						ConfigPara.kpArray[serviceId-1] = (int)(double)ConfigPara.timeList[serviceId-1].get(Math.max(0,((int)(len*0.99) - 1)));
+					} else if((double)ConfigPara.outOfBound[serviceId-1]/ConfigPara.invokeTime[serviceId-1] >= 0.5)
+					{
+//						ArrayList<Double> arimaList = ARIMAReader.arimaList.get(serviceId);
+//						ConfigPara.preWarm[serviceId-1] = arimaList.get(invokeTime)*0.85;
+//						ConfigPara.kpArray[serviceId-1] = (int)(arimaList.get(invokeTime)*0.3);
+						ConfigPara.preWarm[serviceId-1] = 3600000;
+						ConfigPara.kpArray[serviceId-1] = 600000;
 					}
-					timeList.add(t);
-					oldTime = nowTime;
-					if(mean == 0)
-					{
-						mean = (double)t;
-					}else{
-						double oldMean = mean;
-						mean = oldMean + ((double)t - oldMean)/timeList.size();
-						standard = standard + (t - oldMean)*(t - mean);
-						cv = standard/mean/60000.0/invokeTime;
-						System.out.println("mean:" + mean + ", " + "standard:" + standard + ", cv:" + cv);
-						if(timeList.size() >= 50 && cv <= 2.0) //样本数目足够且直方图具有代表性，采用5%和99%的样本点
-						{
-							preWarm = (double)timeList.get(Math.min(timeList.size() - 1,((int)(timeList.size()*0.05) - 1)));
-							keepAlive = (double)timeList.get(Math.max(0,((int)(timeList.size()*0.99) - 1)));
-						} else if((double)outOfBoundTime/invokeTime >= 0.5)
-						{
-							arimaList = ARIMAReader.arimaList.get(serviceId);
-							preWarm = arimaList.get(invokeTime)*0.85;
-							keepAlive = arimaList.get(invokeTime)*0.3;
-						}
-						else { //样本不足或者直方图不具有代表性，pre-warm设置为0，keep-alive设置一个较长时间
-							preWarm = 0.0;
-							keepAlive = 600000.0;
-						}
+					else { //样本不足或者直方图不具有代表性，pre-warm设置为0，keep-alive设置一个较长时间
+						ConfigPara.preWarm[serviceId-1] = 0.0;
+						ConfigPara.kpArray[serviceId-1] = 600000;
 					}
 				}
-				timeList.sort(Comparator.naturalOrder());
 			}
+			ConfigPara.timeList[serviceId-1].sort(Comparator.naturalOrder());
+		}
 
-			ConfigPara.kpArray[serviceId-1] = (int)keepAlive;        //Setting the keep-alive
-			//ConfigPara.funcFlagArray[serviceId-1] = 2;
-			//functionExec.exec();
-			//ConfigPara.funcFlagArray[serviceId-1] = 1;
-			invokeTime++;
-			System.out.println(FuncName[serviceId-1] + " Invoke time is " + invokeTime + ", cold start time is " + coldStartTime + ", cold start rate is " + ((double)coldStartTime/invokeTime)*100.0 + "%, preWarm time is " + preWarm + ", keepAive time is " + keepAlive);
-			ConfigPara.funcFlagArray[serviceId-1] = 1;
+		ConfigPara.invokeTime[serviceId-1]++;
+		ConfigPara.funcFlagArray[serviceId-1] = 1;
+		ConfigPara.getRemainMemCapacity();
 
-			if(preWarm != 0.0) {
-				Date now1 = new Date();
-				Date preWarmTime = new Date(now1.getTime() + (long) preWarm);
-				FunctionList.preMap.put(serviceId, preWarmTime);
-				Timer timer1 = new Timer();
-				TimerTask timerTask1 = new TimerTask() {
-					@Override
-					public void run() {
-						Date now = new Date();
-						System.out.println("prewarm start!!!!!!!!! " + ConfigPara.funcFlagArray[serviceId-1]);
-						if (ConfigPara.funcFlagArray[serviceId-1] == 0) {
-							try {
-								System.out.println(FuncName[serviceId-1] + " prewarm now. pre-warm is " + preWarm);
-								System.out.println(tool.exec(createCmd[serviceId-1]));
-								ConfigPara.funcFlagArray[serviceId - 1] = 1;
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				};
-				timer1.schedule(timerTask1, (long) preWarm);
-			}
-
-			Date now = new Date();
-			Date deleteTime = new Date(now.getTime() + (long) keepAlive);
-			FunctionList.timeMap.put(serviceId, deleteTime);
-			Timer timer = new Timer();
-			int lastTime = invokeTime;
-			TimerTask timerTask = new TimerTask() {
+		if(ConfigPara.preWarm[serviceId-1] != 0.0) {
+//			Date now1 = new Date();
+//			Date preWarmTime = new Date(now1.getTime() + (long) ConfigPara.preWarm[serviceId-1]);
+//			FunctionList.preMap.put(serviceId, preWarmTime);
+			Timer timer1 = new Timer();
+			TimerTask timerTask1 = new TimerTask() {
 				@Override
 				public void run() {
-					Date now = new Date();
-					System.out.println("delete start!!!!!!!!! " + ConfigPara.funcFlagArray[serviceId-1]);
-					if(ConfigPara.funcFlagArray[serviceId-1] == 1 && invokeTime == lastTime)
-					{
-						try {
-							ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[serviceId-1]);
-							ConfigPara.funcFlagArray[serviceId-1] = 0;
-							System.out.println(FuncName[serviceId-1] + " keepAlive over. keepalive is " + keepAlive);
-							System.out.println(tool.exec(deleteCmd[serviceId-1]));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+					if (ConfigPara.funcFlagArray[serviceId-1] == 0) {
+						//							System.out.println(FuncName[serviceId-1] + " prewarm now. pre-warm is " + preWarm);
+//							System.out.println(tool.exec(createCmd[serviceId-1]));
+						ConfigPara.funcFlagArray[serviceId - 1] = 1;
+						ConfigPara.getRemainMemCapacity();
 					}
 				}
 			};
-			timer.schedule(timerTask, (long) keepAlive);
-
-		}catch (IOException e) {
-			e.printStackTrace();
+			timer1.schedule(timerTask1, (long) ConfigPara.preWarm[serviceId-1]);
 		}
+
+//		Date now = new Date();
+//		Date deleteTime = new Date(now.getTime() + (long) keepAlive);
+//		FunctionList.timeMap.put(serviceId, deleteTime);
+		Timer timer = new Timer();
+		int lastTime = ConfigPara.invokeTime[serviceId-1];
+		TimerTask timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime)
+				{
+					ConfigPara.funcFlagArray[serviceId-1] = 0;
+					ConfigPara.getRemainMemCapacity();
+//							System.out.println(FuncName[serviceId-1] + " keepAlive over. keepalive is " + keepAlive);
+//							System.out.println(tool.exec(deleteCmd[serviceId-1]));
+				}
+			}
+		};
+		timer.schedule(timerTask, (long) ConfigPara.keepAlive[serviceId-1]);
+
 	}
 
 	public void exec(int serviceId)
@@ -352,14 +334,10 @@ public abstract class AbstractJobDriver {
 					System.out.println("delete start!!!!!!!!! " + ConfigPara.funcFlagArray[serviceId-1]);
 					if(ConfigPara.funcFlagArray[serviceId-1] == 1 && invokeTime == lastTime)
 					{
-						try {
-							ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[serviceId-1]);
-							ConfigPara.funcFlagArray[serviceId-1] = 0;
-							System.out.println(FuncName[serviceId-1] + " keepAlive over. keepalive is " + keepAlive);
-							System.out.println(tool.exec(deleteCmd[serviceId-1]));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						ConfigPara.setMemoryCapacity(ConfigPara.getRemainMemCapacity() + ConfigPara.funcCapacity[serviceId-1]);
+						ConfigPara.funcFlagArray[serviceId-1] = 0;
+//							System.out.println(FuncName[serviceId-1] + " keepAlive over. keepalive is " + keepAlive);
+//							System.out.println(tool.exec(deleteCmd[serviceId-1]));
 					}
 				}
 			};
