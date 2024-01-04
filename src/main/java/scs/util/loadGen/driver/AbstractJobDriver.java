@@ -133,13 +133,13 @@ public abstract class AbstractJobDriver {
 				{
 					ConfigPara.outOfBound[serviceId-1]++;
 				}
-				ConfigPara.timeList[serviceId-1].add(t);
+				ConfigPara.timeList.get(serviceId-1).add(t);
 				ConfigPara.oldTime[serviceId-1] = nowTime;
 				if(ConfigPara.mean[serviceId-1] == 0)
 				{
 					ConfigPara.mean[serviceId-1] = (double)t;
 				}else{
-					int len = ConfigPara.timeList[serviceId-1].size();
+					int len = ConfigPara.timeList.get(serviceId-1).size();
 					double oldMean = ConfigPara.mean[serviceId-1];
 					int invokeTime = ConfigPara.invokeTime[serviceId-1];
 					ConfigPara.mean[serviceId-1] = oldMean + ((double)t - oldMean)/len;
@@ -148,8 +148,8 @@ public abstract class AbstractJobDriver {
 
 					if(len >= 20 && ConfigPara.cv[serviceId-1] <= 2.0) //样本数目足够且直方图具有代表性，采用5%和99%的样本点
 					{
-						ConfigPara.preWarm[serviceId-1] = (double)ConfigPara.timeList[serviceId-1].get(Math.min(len - 1,((int)(len*0.05) - 1)));
-						ConfigPara.kpArray[serviceId-1] = (int)(double)ConfigPara.timeList[serviceId-1].get(Math.max(0,((int)(len*0.99) - 1)));
+						ConfigPara.preWarm[serviceId-1] = (double)ConfigPara.timeList.get(serviceId-1).get(Math.min(len - 1,((int)(len*0.05) - 1)));
+						ConfigPara.kpArray[serviceId-1] = (int)(double)ConfigPara.timeList.get(serviceId-1).get(Math.max(0,((int)(len*0.99) - 1)));
 					} else if((double)ConfigPara.outOfBound[serviceId-1]/ConfigPara.invokeTime[serviceId-1] >= 0.5)
 					{
 //						ArrayList<Double> arimaList = ARIMAReader.arimaList.get(serviceId);
@@ -164,7 +164,7 @@ public abstract class AbstractJobDriver {
 					}
 				}
 			}
-			ConfigPara.timeList[serviceId-1].sort(Comparator.naturalOrder());
+			ConfigPara.timeList.get(serviceId-1).sort(Comparator.naturalOrder());
 		}
 
 		ConfigPara.invokeTime[serviceId-1]++;
