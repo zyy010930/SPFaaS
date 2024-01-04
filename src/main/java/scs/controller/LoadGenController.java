@@ -342,8 +342,32 @@ public class LoadGenController {
 //					ConfigPara.setMemoryCapacity(30000.0 - d);
 //				}
 			}
-			for(int i = 0;i < list.size(); i++) {
-				System.out.println(list.get(i));
+			String csvFilePath = "/home/zyy/Wild_memory.csv";
+			try {
+				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
+				writer.write("memory\n");
+				for(int i = 0;i < list.size(); i++) {
+					writer.write(list.get(i)+"\n");
+//					System.out.println(list.get(i));
+				}
+				writer.close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+//			for(int i = 0;i < list.size(); i++) {
+//				System.out.println(list.get(i));
+//			}
+
+			String csvFilePath1 = "/home/zyy/Wild_rate.csv";
+			try {
+				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));
+				writer.write("invoke,coldStart,rate\n");
+				for(int i = 0;i < 300; i++) {
+					writer.write(ConfigPara.invokeTime[i]+","+ConfigPara.coldStartTime[i]+","+(double)ConfigPara.coldStartTime[i]/ConfigPara.invokeTime[i]+"\n");
+				}
+				writer.close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
 
 			int invoke = 0;
