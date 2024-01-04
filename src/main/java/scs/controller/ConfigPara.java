@@ -56,7 +56,7 @@ public class ConfigPara {
     public static Double[] cv;
 
     public ConfigPara() {
-        maxFuncCapacity = 30000.0;
+        maxFuncCapacity = 43500.0;
         currFuncCapacity = 0.0;
         funcCapacity = new Double[300];
 
@@ -85,7 +85,7 @@ public class ConfigPara {
 
         for(int i=0;i<300;i++)
         {
-            funcCapacity[i] = 100.0;
+            funcCapacity[i] = 100.0 + ((i%20)-5)*10;
             initTime[i] = 1.0 + (i%5)*0.2;
             funcName[i] = "func" + i;
             kpArray[i] = 0;
