@@ -301,7 +301,7 @@ public class LoadGenController {
 			jsonParmStr=Repository.resNet50ParmStr;
 			queryItemsStr=queryItemsStr.replace("Ip","192.168.1.7");
 			queryItemsStr=queryItemsStr.replace("Port","31112");
-			queryItemsStr=queryItemsStr.replace("Hash",ConfigPara.funcName[id]);
+			queryItemsStr=queryItemsStr.replace("Hash",ConfigPara.funcName[id-1]);
 		}
 		public void run() {
 			OverFramework.run(this.serviceId,3);
