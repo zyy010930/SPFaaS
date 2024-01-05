@@ -58,7 +58,7 @@ public class Wild {
 //						ArrayList<Double> arimaList = ARIMAReader.arimaList.get(serviceId);
 //						ConfigPara.preWarm[serviceId-1] = arimaList.get(invokeTime)*0.85;
 //						ConfigPara.kpArray[serviceId-1] = (int)(arimaList.get(invokeTime)*0.3);
-                    ConfigPara.preWarm[serviceId-1] = 3600000;
+                    ConfigPara.preWarm[serviceId-1] = 0.0;
                     ConfigPara.keepAlive[serviceId-1] = 600000;
                 }
                 else { //样本不足或者直方图不具有代表性，pre-warm设置为0，keep-alive设置一个较长时间
