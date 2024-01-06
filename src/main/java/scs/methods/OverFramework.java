@@ -30,7 +30,7 @@ public class OverFramework {
         return flag;
     }
 
-    public static void run(Integer sid, Integer methodId) {
+    public static void run(Integer sid, Integer methodId) throws InterruptedException {
         setFlag(methodId);
 
         /**

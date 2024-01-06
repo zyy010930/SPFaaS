@@ -304,7 +304,11 @@ public class LoadGenController {
 			queryItemsStr=queryItemsStr.replace("Hash",ConfigPara.funcName[id-1]);
 		}
 		public void run() {
-			OverFramework.run(this.serviceId,3);
+			try {
+				OverFramework.run(this.serviceId,3);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 			//int time= HttpClientPool.postResponseTime(httpClient, queryItemsStr, jsonParmStr);
 			//System.out.println(time);
 		}
