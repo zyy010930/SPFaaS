@@ -11,7 +11,7 @@ import java.util.TimerTask;
 public class Wild {
     public Wild(){}
 
-    public static void run(Integer serviceId){
+    public static void run(Integer serviceId) throws InterruptedException {
 //        Repository.loaderMap.get(id).getAbstractJobDriver().executeJob(id, 3);
         System.out.println(ConfigPara.funcName[serviceId-1] + " request");
         //FunctionExec functionExec = new FunctionExec(httpClient, queryItemsStr, serviceId, jsonParmStr, sleepUnit, "POST");
@@ -73,43 +73,46 @@ public class Wild {
         ConfigPara.funcFlagArray[serviceId-1] = 1;
         ConfigPara.getRemainMemCapacity();
 
-        if(ConfigPara.preWarm[serviceId-1] != 0.0) {
-//			Date now1 = new Date();
-//			Date preWarmTime = new Date(now1.getTime() + (long) ConfigPara.preWarm[serviceId-1]);
-//			FunctionList.preMap.put(serviceId, preWarmTime);
-            Timer timer1 = new Timer();
-            TimerTask timerTask1 = new TimerTask() {
-                @Override
-                public void run() {
-                    if (ConfigPara.funcFlagArray[serviceId-1] == 0) {
-                        //							System.out.println(FuncName[serviceId-1] + " prewarm now. pre-warm is " + preWarm);
-//							System.out.println(tool.exec(createCmd[serviceId-1]));
-                        ConfigPara.funcFlagArray[serviceId - 1] = 1;
-                        ConfigPara.getRemainMemCapacity();
-                    }
-                }
-            };
-            timer1.schedule(timerTask1, (long) ConfigPara.preWarm[serviceId-1]);
+        Thread.sleep((long) ConfigPara.preWarm[serviceId-1]);
+        if (ConfigPara.funcFlagArray[serviceId-1] == 0) {
+            ConfigPara.funcFlagArray[serviceId - 1] = 1;
+            ConfigPara.getRemainMemCapacity();
+        }
+        int lastTime = ConfigPara.invokeTime[serviceId-1];
+        Thread.sleep((long) ConfigPara.keepAlive[serviceId-1]);
+        if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime)
+        {
+            ConfigPara.funcFlagArray[serviceId-1] = 0;
+            ConfigPara.getRemainMemCapacity();
         }
 
-//		Date now = new Date();
-//		Date deleteTime = new Date(now.getTime() + (long) keepAlive);
-//		FunctionList.timeMap.put(serviceId, deleteTime);
-        Timer timer = new Timer();
-        int lastTime = ConfigPara.invokeTime[serviceId-1];
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime)
-                {
-                    ConfigPara.funcFlagArray[serviceId-1] = 0;
-                    ConfigPara.getRemainMemCapacity();
-//							System.out.println(FuncName[serviceId-1] + " keepAlive over. keepalive is " + keepAlive);
-//							System.out.println(tool.exec(deleteCmd[serviceId-1]));
-                }
-            }
-        };
-        timer.schedule(timerTask, (long) ConfigPara.keepAlive[serviceId-1]);
+//        if(ConfigPara.preWarm[serviceId-1] != 0.0) {
+//            Timer timer1 = new Timer();
+//            TimerTask timerTask1 = new TimerTask() {
+//                @Override
+//                public void run() {
+//                    if (ConfigPara.funcFlagArray[serviceId-1] == 0) {
+//                        ConfigPara.funcFlagArray[serviceId - 1] = 1;
+//                        ConfigPara.getRemainMemCapacity();
+//                    }
+//                }
+//            };
+//            timer1.schedule(timerTask1, (long) ConfigPara.preWarm[serviceId-1]);
+//        }
+//
+//        Timer timer = new Timer();
+//        int lastTime = ConfigPara.invokeTime[serviceId-1];
+//        TimerTask timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime)
+//                {
+//                    ConfigPara.funcFlagArray[serviceId-1] = 0;
+//                    ConfigPara.getRemainMemCapacity();
+//                }
+//            }
+//        };
+//        timer.schedule(timerTask, (long) ConfigPara.keepAlive[serviceId-1]);
     }
 
 }
