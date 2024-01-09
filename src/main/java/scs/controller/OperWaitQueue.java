@@ -59,7 +59,7 @@ public class OperWaitQueue {
         Repository.loaderMap.get(sid).getAbstractJobDriver().exec(sid);
     }
 
-    public static void execFuncZyy(Integer sid){
+    public static void execFuncZyy(Integer sid) throws InterruptedException {
         JobExec jobExec = new JobExec();
         jobExec.ZyyExec(sid);
         //Repository.loaderMap.get(sid).getAbstractJobDriver().ZyyExec(sid);
