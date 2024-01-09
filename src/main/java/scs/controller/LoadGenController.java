@@ -240,10 +240,10 @@ public class LoadGenController {
 		public void run(){
 			System.out.println("new start");
 			//SPFaaS
-//			PreWarmThread thread = new PreWarmThread(serviceId);
-//			ExecutorService executorService = Executors.newFixedThreadPool(1);
-//			executorService.execute(thread);
-//			executorService.shutdown();
+			PreWarmThread thread = new PreWarmThread(serviceId);
+			ExecutorService executorService = Executors.newFixedThreadPool(1);
+			executorService.execute(thread);
+			executorService.shutdown();
 			for(Integer time : this.list)
 			{
 				System.out.println("function:" + serviceId + "sleep:" + time);
@@ -306,7 +306,7 @@ public class LoadGenController {
 		}
 		public void run() {
 			try {
-				OverFramework.run(this.serviceId,3);
+				OverFramework.run(this.serviceId,6);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
