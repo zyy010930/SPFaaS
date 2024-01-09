@@ -58,7 +58,7 @@ public class LoadGenController {
 			ConfigPara configPara = new ConfigPara();
 			ConfigPara.setMemoryCapacity(43500.0);
 			System.out.println("start thread");
-			ExecutorService executor = Executors.newFixedThreadPool(300);
+			ExecutorService executor = Executors.newFixedThreadPool(301);
 			for(int i = 1;i <= 300;i++)
 			{
 				FunctionThread thread = new FunctionThread(i, funcMap.get(i));
