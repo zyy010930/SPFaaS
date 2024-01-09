@@ -25,6 +25,9 @@ import scs.util.repository.Repository;
 import scs.util.tools.ARIMAReader;
 import scs.util.tools.HttpClientPool;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 /**
  * Load generator controller class, it includes interfaces as follows:
  * 1.Control the open/close of load generator
@@ -268,17 +271,25 @@ public class LoadGenController {
 
 		public void run() {
 			ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
+			ArrayList<Integer> invokeList = new ArrayList<>();
+			int n = 0;
 			for(Integer i : list)
 			{
+				invokeList.add(ConfigPara.invokeTime[serviceId-1]);
+				if(n >= 10 && i == 0 && Objects.equals(ConfigPara.invokeTime[serviceId - 1], invokeList.get(n-10)))
+				{
+					ConfigPara.funcFlagArray[serviceId - 1] = 0;
+				}
 				if(i == 1 && ConfigPara.funcFlagArray[serviceId-1] == 0)
 				{
-					System.out.println(ConfigPara.funcName[serviceId-1] + " prewarm now. pre-warm is " + ConfigPara.preWarm[serviceId-1]);
+					System.out.println(ConfigPara.funcName[serviceId-1] + " prewarm now.");
 					if(ConfigPara.funcCapacity[serviceId - 1] > ConfigPara.getRemainMemCapacity()) {
 						ConfigPara.containerRelease(serviceId); //替换容器
 					}
 					ConfigPara.funcFlagArray[serviceId - 1] = 1;
 					ConfigPara.getRemainMemCapacity();
 				}
+				n++;
 				try {
 					Thread.sleep(60000);
 				} catch (InterruptedException e) {

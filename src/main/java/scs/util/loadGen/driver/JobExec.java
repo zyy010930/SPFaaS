@@ -15,10 +15,10 @@ import static scs.methods.Zyy.ZyyFaaS.DFSFunction;
 public class JobExec {
 
     public void ZyyExec(int serviceId) throws InterruptedException {
-        CloseableHttpClient httpClient;
-        String url = "http://192.168.1.7:31112/function/func"+serviceId;
-        String url0 = "http://192.168.1.7:31112/zero/func"+serviceId;
-        httpClient= HttpClientPool.getInstance().getConnection();
+//        CloseableHttpClient httpClient;
+//        String url = "http://192.168.1.7:31112/function/func"+serviceId;
+//        String url0 = "http://192.168.1.7:31112/zero/func"+serviceId;
+//        httpClient= HttpClientPool.getInstance().getConnection();
         System.out.println(ConfigPara.funcName[serviceId-1] + " request");
 
         if(ConfigPara.firstTime[serviceId-1] == 0){
