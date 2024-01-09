@@ -359,7 +359,7 @@ public class LoadGenController {
 //				}
 			}
 			//String csvFilePath = "/home/zyy/SPFaaS_memory_100.csv";
-			String csvFilePath = "/home/zyy/Wild_memory.csv";
+			String csvFilePath = "/home/zyy/SPFaaS_memory100.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
 				writer.write("memory\n");
@@ -376,7 +376,7 @@ public class LoadGenController {
 //			}
 
 			//String csvFilePath1 = "/home/zyy/SPFaaS_rate_100.csv";
-			String csvFilePath1 = "/home/zyy/Wild_rate.csv";
+			String csvFilePath1 = "/home/zyy/SPFaaS_rate100.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));
 				writer.write("invoke,coldStart,rate\n");
