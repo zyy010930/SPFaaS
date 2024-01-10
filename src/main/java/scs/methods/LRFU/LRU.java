@@ -29,7 +29,7 @@ public class LRU {
         }
     }
 
-    public static void run(Integer sid) {
+    public static void run(Integer sid) throws InterruptedException {
         if(ConfigPara.waitQueue.size() != 0) {
             if (ConfigPara.funcFlagArray[sid - 1] == 0) {
                 long tempTimeInterval = Long.MAX_VALUE;

@@ -21,7 +21,7 @@ public class LFU {
         //funcFreqArray = new Integer[]{0, 0, 0, 0, 0, 0, 0};
     }
 
-    public static void run(Integer sid) {
+    public static void run(Integer sid) throws InterruptedException {
         if(ConfigPara.waitQueue.size() != 0) {
             if(ConfigPara.funcFlagArray[sid-1] == 0) {
                 Integer tempFreq = 0;

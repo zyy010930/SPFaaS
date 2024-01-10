@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @ClassName OperWaitQueue
@@ -42,7 +44,7 @@ public class OperWaitQueue {
         }
     }
 
-    public static void execRequests(Integer serviceId) {
+    public static void execRequests(Integer serviceId) throws InterruptedException {
         if(ConfigPara.waitQueue.size() != 0) {
             ConfigPara.waitQueue.add(serviceId);
         }else {
@@ -51,8 +53,29 @@ public class OperWaitQueue {
         }
     }
 
-    public static void execFunc(Integer sid) {
-        Repository.loaderMap.get(sid).getAbstractJobDriver().executeJob(sid,0);
+    public static void execFunc(Integer serviceId) throws InterruptedException {
+        System.out.println(ConfigPara.funcName[serviceId-1] + " request");
+
+        if(ConfigPara.funcFlagArray[serviceId-1] == 0) {
+            ConfigPara.getRemainMemCapacity();
+            ConfigPara.funcFlagArray[serviceId-1] = 2;
+            ConfigPara.coldStartTime[serviceId-1]++;
+            System.out.println(ConfigPara.funcName[serviceId-1] + " cold start time is " + ConfigPara.coldStartTime[serviceId-1]);
+        }
+        else
+            ConfigPara.funcFlagArray[serviceId-1] = 2;
+
+        ConfigPara.invokeTime[serviceId-1]++;
+        ConfigPara.funcFlagArray[serviceId-1] = 1;
+        ConfigPara.getRemainMemCapacity();
+
+        int lastTime = ConfigPara.invokeTime[serviceId-1];
+        Thread.sleep(600000);
+        if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime)
+        {
+            ConfigPara.funcFlagArray[serviceId-1] = 0;
+            ConfigPara.getRemainMemCapacity();
+        }
     }
 
     public static void execFuncHybrid(Integer sid){

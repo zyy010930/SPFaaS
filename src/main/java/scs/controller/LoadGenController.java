@@ -58,8 +58,8 @@ public class LoadGenController {
 			Map<Integer, ArrayList<Integer>> funcMap = funcExecTimeGen.funcExecTimeGenAver();
 
 			//Setting Memory Capacity
-			ConfigPara configPara = new ConfigPara();
-			ConfigPara.setMemoryCapacity(43500.0);
+			//ConfigPara configPara = new ConfigPara();
+			//ConfigPara.setMemoryCapacity(43500.0);
 			System.out.println("start thread");
 			ExecutorService executor = Executors.newFixedThreadPool(301);
 			for(int i = 1;i <= 300;i++)
@@ -317,7 +317,7 @@ public class LoadGenController {
 		}
 		public void run() {
 			try {
-				OverFramework.run(this.serviceId,3);
+				OverFramework.run(this.serviceId,4);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
@@ -359,7 +359,7 @@ public class LoadGenController {
 //				}
 			}
 			//String csvFilePath = "/home/zyy/SPFaaS_memory100.csv";
-			String csvFilePath = "/home/zyy/Wild_memory.csv";
+			String csvFilePath = "/home/zyy/Greedy_memory.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
 				writer.write("memory\n");
@@ -376,7 +376,7 @@ public class LoadGenController {
 //			}
 
 			//String csvFilePath1 = "/home/zyy/SPFaaS_rate100.csv";
-			String csvFilePath1 = "/home/zyy/Wild_rate.csv";
+			String csvFilePath1 = "/home/zyy/Greedy_rate.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));
 				writer.write("invoke,coldStart,rate\n");

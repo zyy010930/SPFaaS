@@ -21,6 +21,8 @@ public class ConfigPara {
     public static Integer[] invokeTime;
     public static Double[] costNum;
 
+    public static Double[] priory;
+
     /*********
      When functions are running at memory and the remaining memory capacity cannot support to response other functions,
      the functions are added into the waitQueue. Therefore, the waitQueue stores ids of waiting functions.
@@ -56,7 +58,8 @@ public class ConfigPara {
     public static Double[] cv;
 
     public ConfigPara() {
-        maxFuncCapacity = 43500.0;
+        //maxFuncCapacity = 43500.0;
+        maxFuncCapacity = 23000.0;
         currFuncCapacity = 0.0;
         funcCapacity = new Double[300];
 
@@ -68,6 +71,7 @@ public class ConfigPara {
         invokeTime = new Integer[300];
 
         costNum = new Double[300];
+        priory = new Double[300];
         funcName = new String[300];
         firstTime = new Long[300];
         start = new boolean[300];
@@ -92,6 +96,7 @@ public class ConfigPara {
             funcFlagArray[i] = 0;
             invokeTime[i] = 0;
             costNum[i] = 0.0;
+            priory[i] = Double.MAX_VALUE;
             firstTime[i] = 0L;
             start[i] = false;
             coldStartTime[i] = 0;
