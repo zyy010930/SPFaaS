@@ -58,7 +58,7 @@ public class LoadGenController {
 			Map<Integer, ArrayList<Integer>> funcMap = funcExecTimeGen.funcExecTimeGenAver();
 
 			//Setting Memory Capacity
-			//ConfigPara configPara = new ConfigPara();
+			ConfigPara configPara = new ConfigPara();
 			//ConfigPara.setMemoryCapacity(43500.0);
 			System.out.println("start thread");
 			ExecutorService executor = Executors.newFixedThreadPool(301);
