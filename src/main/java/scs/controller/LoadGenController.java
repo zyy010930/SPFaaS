@@ -243,10 +243,10 @@ public class LoadGenController {
 		public void run(){
 			System.out.println("new start");
 			//SPFaaS
-//			PreWarmThread thread = new PreWarmThread(serviceId);
-//			ExecutorService executorService = Executors.newFixedThreadPool(1);
-//			executorService.execute(thread);
-//			executorService.shutdown();
+			PreWarmThread thread = new PreWarmThread(serviceId);
+			ExecutorService executorService = Executors.newFixedThreadPool(1);
+			executorService.execute(thread);
+			executorService.shutdown();
 			for(Integer time : this.list)
 			{
 				System.out.println("function:" + serviceId + "sleep:" + time);
@@ -317,7 +317,7 @@ public class LoadGenController {
 		}
 		public void run() {
 			try {
-				OverFramework.run(this.serviceId,4);
+				OverFramework.run(this.serviceId,6);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
@@ -358,8 +358,8 @@ public class LoadGenController {
 //					ConfigPara.setMemoryCapacity(30000.0 - d);
 //				}
 			}
-			//String csvFilePath = "/home/zyy/SPFaaS_memory100.csv";
-			String csvFilePath = "/home/zyy/Greedy_memory.csv";
+			String csvFilePath = "/home/zyy/SPFaaS_memory80.csv";
+			//String csvFilePath = "/home/zyy/Greedy_memory.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
 				writer.write("memory\n");
@@ -375,8 +375,8 @@ public class LoadGenController {
 //				System.out.println(list.get(i));
 //			}
 
-			//String csvFilePath1 = "/home/zyy/SPFaaS_rate100.csv";
-			String csvFilePath1 = "/home/zyy/Greedy_rate.csv";
+			String csvFilePath1 = "/home/zyy/SPFaaS_rate80.csv";
+			//String csvFilePath1 = "/home/zyy/Greedy_rate.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));
 				writer.write("invoke,coldStart,rate\n");
