@@ -270,7 +270,8 @@ public class LoadGenController {
 		}
 
 		public void run() {
-			ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
+			//ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
+			ArrayList<Integer> list = ARIMAReader.IceList.get(serviceId);
 			ArrayList<Integer> invokeList = new ArrayList<>();
 			int n = 0;
 			for(Integer i : list)
@@ -317,7 +318,7 @@ public class LoadGenController {
 		}
 		public void run() {
 			try {
-				OverFramework.run(this.serviceId,6);
+				OverFramework.run(this.serviceId,7);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
@@ -358,8 +359,8 @@ public class LoadGenController {
 //					ConfigPara.setMemoryCapacity(30000.0 - d);
 //				}
 			}
-			String csvFilePath = "/home/zyy/SPFaaS_memory80.csv";
-			//String csvFilePath = "/home/zyy/Greedy_memory.csv";
+			//String csvFilePath = "/home/zyy/SPFaaS_memory80.csv";
+			String csvFilePath = "/home/zyy/Ice_memory.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
 				writer.write("memory\n");
@@ -375,8 +376,8 @@ public class LoadGenController {
 //				System.out.println(list.get(i));
 //			}
 
-			String csvFilePath1 = "/home/zyy/SPFaaS_rate80.csv";
-			//String csvFilePath1 = "/home/zyy/Greedy_rate.csv";
+			//String csvFilePath1 = "/home/zyy/SPFaaS_rate80.csv";
+			String csvFilePath1 = "/home/zyy/Ice_rate.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));
 				writer.write("invoke,coldStart,rate\n");

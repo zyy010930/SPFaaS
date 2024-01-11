@@ -2,6 +2,7 @@ package scs.methods;
 
 import scs.controller.OperWaitQueue;
 import scs.methods.FaaSCache.GreedyDual;
+import scs.methods.Ice.IceBreak;
 import scs.methods.LRFU.LFU;
 import scs.methods.LRFU.LRU;
 import scs.methods.Wild.Wild;
@@ -60,6 +61,9 @@ public class OverFramework {
                 break;
             case 6:
                 ZyyFaaS.run(sid);
+                break;
+            case 7:
+                IceBreak.run(sid);
                 break;
             default:
                 System.out.println("Method id is Chosen Error!");
