@@ -243,10 +243,10 @@ public class LoadGenController {
 		public void run(){
 			System.out.println("new start");
 			//SPFaaS
-//			PreWarmThread thread = new PreWarmThread(serviceId);
-//			ExecutorService executorService = Executors.newFixedThreadPool(1);
-//			executorService.execute(thread);
-//			executorService.shutdown();
+			PreWarmThread thread = new PreWarmThread(serviceId);
+			ExecutorService executorService = Executors.newFixedThreadPool(1);
+			executorService.execute(thread);
+			executorService.shutdown();
 			for(Integer time : this.list)
 			{
 				System.out.println("function:" + serviceId + "sleep:" + time);
@@ -270,8 +270,8 @@ public class LoadGenController {
 		}
 
 		public void run() {
-			ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
-			//ArrayList<Integer> list = ARIMAReader.IceList.get(serviceId);
+			//ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
+			ArrayList<Integer> list = ARIMAReader.IceList.get(serviceId);
 			ArrayList<Integer> invokeList = new ArrayList<>();
 			int n = 0;
 			for(Integer i : list)
@@ -318,7 +318,7 @@ public class LoadGenController {
 		}
 		public void run() {
 			try {
-				OverFramework.run(this.serviceId,3);
+				OverFramework.run(this.serviceId,7);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
@@ -360,7 +360,7 @@ public class LoadGenController {
 //				}
 			}
 			//String csvFilePath = "/home/zyy/SPFaaS_memory75.csv";
-			String csvFilePath = "/home/zyy/Wild_memory_50.csv";
+			String csvFilePath = "/home/zyy/Ice_memory_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
 				writer.write("memory\n");
@@ -377,7 +377,7 @@ public class LoadGenController {
 //			}
 
 			//String csvFilePath1 = "/home/zyy/SPFaaS_rate75.csv";
-			String csvFilePath1 = "/home/zyy/Wild_rate_50.csv";
+			String csvFilePath1 = "/home/zyy/Ice_rate_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));
 				writer.write("invoke,coldStart,rate\n");
