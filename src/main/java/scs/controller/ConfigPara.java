@@ -58,8 +58,8 @@ public class ConfigPara {
     public static Double[] cv;
 
     public ConfigPara() {
-        maxFuncCapacity = 43500.0;
-        //maxFuncCapacity = 24000.0;
+        //maxFuncCapacity = 43500.0;
+        maxFuncCapacity = 22500.0;
         currFuncCapacity = 0.0;
         funcCapacity = new Double[300];
 
