@@ -49,7 +49,7 @@ public class Wild {
                 ConfigPara.standard[serviceId-1] = ConfigPara.standard[serviceId-1] + (t - oldMean)*(t - ConfigPara.mean[serviceId-1]);
                 ConfigPara.cv[serviceId-1] = ConfigPara.standard[serviceId-1]/ConfigPara.mean[serviceId-1]/60000.0/ConfigPara.invokeTime[serviceId-1];
 
-                if(len >= 20 && ConfigPara.cv[serviceId-1] <= 2.0) //样本数目足够且直方图具有代表性，采用5%和99%的样本点
+                if(len >= 50 && ConfigPara.cv[serviceId-1] <= 2.0) //样本数目足够且直方图具有代表性，采用5%和99%的样本点
                 {
                     ConfigPara.preWarm[serviceId-1] = (double)ConfigPara.timeList.get(serviceId-1).get(Math.min(len - 1,((int)(len*0.05) - 1)));
                     ConfigPara.keepAlive[serviceId-1] = (int)(double)ConfigPara.timeList.get(serviceId-1).get(Math.max(0,((int)(len*0.99) - 1)));
