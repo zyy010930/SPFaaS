@@ -57,9 +57,15 @@ public class ConfigPara {
 
     public static Double[] cv;
 
+    public static double beta;
+
+    public static double gama;
+
     public ConfigPara() {
         //maxFuncCapacity = 43500.0;
-        maxFuncCapacity = 18000.0;
+        beta = 0.1;
+        gama = 0.5;
+        maxFuncCapacity = 22500.0;
         currFuncCapacity = 0.0;
         funcCapacity = new Double[300];
 
@@ -135,22 +141,28 @@ public class ConfigPara {
     }
 
     public static synchronized void containerRelease(Integer serviceId){
-        int kp = 0;
+        double kp = 0;
         int invoke = 0;
+        int coldStartTime = 0;
         for(int j=0;j<ConfigPara.funcFlagArray.length;j++)
         {
             if(ConfigPara.invokeTime[j]>invoke)
             {
                 invoke = ConfigPara.invokeTime[j];
             }
-            if(ConfigPara.kpArray[j]>kp)
+            if(ConfigPara.keepAlive[j]>kp)
             {
-                kp = ConfigPara.kpArray[j];
+                kp = ConfigPara.keepAlive[j];
+            }
+            if(ConfigPara.coldStartTime[j]>coldStartTime)
+            {
+                coldStartTime = ConfigPara.coldStartTime[j];
             }
         }
         for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
         {
-            ConfigPara.costNum[i] = 0.5*(ConfigPara.invokeTime[i]/invoke) + 0.5*(ConfigPara.kpArray[i]/kp); //计算每个函数容器的释放代价
+            //ConfigPara.costNum[i] = 0.5*(ConfigPara.invokeTime[i]/invoke) + 0.5*(ConfigPara.keepAlive[i]/kp); //计算每个函数容器的释放代价
+            ConfigPara.costNum[i] = ConfigPara.beta*((ConfigPara.invokeTime[i]+1)/(invoke+1)) + (1-ConfigPara.beta)*(1 - (ConfigPara.coldStartTime[i]+1)/(coldStartTime+1)); //计算每个函数容器的释放代价
         }
 
         Double min = Double.MAX_VALUE;
@@ -164,7 +176,7 @@ public class ConfigPara {
             Set<Integer> list1 = new HashSet<>();
             for (Map.Entry<Set<Integer>,Double> entry : mp1.entrySet()) {
                 cost = entry.getValue();
-                list.addAll(entry.getKey());
+                list1.addAll(entry.getKey());
             }
             if(cost < min)
             {
