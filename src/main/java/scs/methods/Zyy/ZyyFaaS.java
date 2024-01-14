@@ -41,15 +41,21 @@ public class ZyyFaaS {
         }
         Double min = Double.MAX_VALUE;
         Set<Integer> bestList = new HashSet<>();
-        idList.add(id);
-        for (int i = 0; i < 300; i++) {
+        double cp = capacity - ConfigPara.funcCapacity[id];
+        int num = 0;
+        Random random = new Random();
+        int minValue = 0;
+        int maxValue = 299;
+        int randomInt = random.nextInt(maxValue - minValue + 1) + minValue;
+        for(int i=randomInt;i < randomInt + 300;i++){
+            int ii = i % 300;
             double cost = 0.0;
-            if(!idList.contains(i))
+            if(!idList.contains(ii) && ConfigPara.funcFlagArray[i] != 0)
             {
                 Set<Integer> list = new HashSet<>(idList);
                 //list.add(id);
                 Map<Set<Integer>,Double> mp1 = new HashMap<>();
-                mp1 = DFSFunction(list,i,capacity - ConfigPara.funcCapacity[id],sumCost + ConfigPara.costNum[i]);
+                mp1 = DFSFunction(list,ii,cp,sumCost + ConfigPara.costNum[i]);
                 Set<Integer> list1 = new HashSet<>();
                 for (Map.Entry<Set<Integer>,Double> entry : mp1.entrySet()) {
                     cost = entry.getValue();
@@ -61,7 +67,10 @@ public class ZyyFaaS {
                     bestList.clear();
                     bestList.addAll(list1);
                 }
+                num++;
             }
+            if(num == 5)
+                break;
         }
         mp.put(bestList,min);
         return mp;

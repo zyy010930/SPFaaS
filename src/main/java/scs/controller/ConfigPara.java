@@ -64,7 +64,7 @@ public class ConfigPara {
     public ConfigPara() {
         //maxFuncCapacity = 43500.0;
         beta = 0.5;
-        gama = 0.9;
+        gama = 0.5;
         maxFuncCapacity = 22500.0;
         currFuncCapacity = 0.0;
         funcCapacity = new Double[300];
@@ -159,7 +159,7 @@ public class ConfigPara {
                 coldStartTime = ConfigPara.coldStartTime[j];
             }
         }
-        for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
+        for(int i=0;i<300;i++)
         {
             //ConfigPara.costNum[i] = 0.5*(ConfigPara.invokeTime[i]/invoke) + 0.5*(ConfigPara.keepAlive[i]/kp); //计算每个函数容器的释放代价
             ConfigPara.costNum[i] = ConfigPara.beta*((ConfigPara.invokeTime[i]+1)/(invoke+1)) + (1-ConfigPara.beta)*(1 - (ConfigPara.coldStartTime[i]+1)/(coldStartTime+1)); //计算每个函数容器的释放代价
@@ -167,12 +167,22 @@ public class ConfigPara {
 
         Double min = Double.MAX_VALUE;
         Set<Integer> bestList = new HashSet<>();
-        for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
+        int num = 0;
+        Random random = new Random();
+        int minValue = 0;
+        int maxValue = 299;
+        int randomInt = random.nextInt(maxValue - minValue + 1) + minValue;
+        for(int i=randomInt;i < randomInt + 300;i++)
         {
+            int id = i % 300;
+            if(ConfigPara.funcFlagArray[id] == 0)
+            {
+                continue;
+            }
             double cost = 0.0;
             Set<Integer> list = new HashSet<>();
             Map<Set<Integer>,Double> mp1 = new HashMap<>();
-            mp1 = DFSFunction(list,i,ConfigPara.funcCapacity[serviceId - 1],ConfigPara.costNum[i]);
+            mp1 = DFSFunction(list,id,ConfigPara.funcCapacity[serviceId - 1],ConfigPara.costNum[i]);
             Set<Integer> list1 = new HashSet<>();
             for (Map.Entry<Set<Integer>,Double> entry : mp1.entrySet()) {
                 cost = entry.getValue();
@@ -184,8 +194,13 @@ public class ConfigPara {
                 bestList.clear();
                 bestList.addAll(list1);
             }
+            if(num == 5)
+            {
+                break;
+            }
+            num++;
         }
-        for(int i=0;i<ConfigPara.funcFlagArray.length;i++)
+        for(int i=0;i<300;i++)
         {
             if(bestList.contains(i)) {
                 System.out.println(i + "-----------release-----------");
