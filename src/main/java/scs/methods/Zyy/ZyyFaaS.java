@@ -50,12 +50,12 @@ public class ZyyFaaS {
         for(int i=randomInt;i < randomInt + 300;i++){
             int ii = i % 300;
             double cost = 0.0;
-            if(!idList.contains(ii) && ConfigPara.funcFlagArray[i] != 0)
+            if(!idList.contains(ii) && ConfigPara.funcFlagArray[ii] != 0)
             {
                 Set<Integer> list = new HashSet<>(idList);
                 //list.add(id);
                 Map<Set<Integer>,Double> mp1 = new HashMap<>();
-                mp1 = DFSFunction(list,ii,cp,sumCost + ConfigPara.costNum[i]);
+                mp1 = DFSFunction(list,ii,cp,sumCost + ConfigPara.costNum[ii]);
                 Set<Integer> list1 = new HashSet<>();
                 for (Map.Entry<Set<Integer>,Double> entry : mp1.entrySet()) {
                     cost = entry.getValue();

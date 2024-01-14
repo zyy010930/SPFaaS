@@ -182,7 +182,7 @@ public class ConfigPara {
             double cost = 0.0;
             Set<Integer> list = new HashSet<>();
             Map<Set<Integer>,Double> mp1 = new HashMap<>();
-            mp1 = DFSFunction(list,id,ConfigPara.funcCapacity[serviceId - 1],ConfigPara.costNum[i]);
+            mp1 = DFSFunction(list,id,ConfigPara.funcCapacity[serviceId - 1],ConfigPara.costNum[id]);
             Set<Integer> list1 = new HashSet<>();
             for (Map.Entry<Set<Integer>,Double> entry : mp1.entrySet()) {
                 cost = entry.getValue();
