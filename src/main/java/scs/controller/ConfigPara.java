@@ -1,5 +1,8 @@
 package scs.controller;
 
+import org.apache.http.impl.client.CloseableHttpClient;
+import scs.util.tools.HttpClientPool;
+
 import java.util.*;
 
 import static scs.methods.Zyy.ZyyFaaS.DFSFunction;
@@ -144,6 +147,10 @@ public class ConfigPara {
         double kp = 0;
         int invoke = 0;
         int coldStartTime = 0;
+        CloseableHttpClient httpClient;
+        String url = "http://192.168.1.7:31112/function/func"+serviceId;
+        String url0 = "http://192.168.1.7:31112/zero/func"+serviceId;
+        httpClient= HttpClientPool.getInstance().getConnection();
         for(int j=0;j<ConfigPara.funcFlagArray.length;j++)
         {
             if(ConfigPara.invokeTime[j]>invoke)
@@ -205,7 +212,7 @@ public class ConfigPara {
             if(bestList.contains(i)) {
                 System.out.println(i + "-----------release-----------");
                 ConfigPara.funcFlagArray[i] = 0;
-
+                HttpClientPool.getResponseTime(httpClient, url0);
                 ConfigPara.getRemainMemCapacity();
             }
         }
