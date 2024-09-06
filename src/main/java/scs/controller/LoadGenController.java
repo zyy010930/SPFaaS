@@ -359,7 +359,7 @@ public class LoadGenController {
 //					ConfigPara.setMemoryCapacity(30000.0 - d);
 //				}
 			}
-			String csvFilePath = "/home/zyy/Gauss_memory.csv";
+			String csvFilePath = "/home/zyy/gama0.7_memory.csv";
 			//String csvFilePath = "/home/zyy/Ice_memory_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
@@ -376,7 +376,7 @@ public class LoadGenController {
 //				System.out.println(list.get(i));
 //			}
 
-			String csvFilePath1 = "/home/zyy/Guass_rate.csv";
+			String csvFilePath1 = "/home/zyy/gama0.7_rate.csv";
 			//String csvFilePath1 = "/home/zyy/Ice_rate_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));
