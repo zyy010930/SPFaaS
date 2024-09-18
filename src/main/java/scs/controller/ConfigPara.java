@@ -212,7 +212,7 @@ public class ConfigPara {
             if(bestList.contains(i)) {
                 System.out.println(i + "-----------release-----------");
                 ConfigPara.funcFlagArray[i] = 0;
-                HttpClientPool.getResponseTime(httpClient, url0);
+                //HttpClientPool.getResponseTime(httpClient, url0);
                 ConfigPara.getRemainMemCapacity();
             }
         }
