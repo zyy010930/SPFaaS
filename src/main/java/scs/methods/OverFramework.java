@@ -5,6 +5,7 @@ import scs.methods.FaaSCache.GreedyDual;
 import scs.methods.Ice.IceBreak;
 import scs.methods.LRFU.LFU;
 import scs.methods.LRFU.LRU;
+import scs.methods.Spes.Spes;
 import scs.methods.Wild.Wild;
 import scs.methods.Zyy.ZyyFaaS;
 import scs.methods.ZyyCache.Hybrid;
@@ -65,6 +66,8 @@ public class OverFramework {
             case 7:
                 IceBreak.run(sid);
                 break;
+            case 8:
+                Spes.run(sid);
             default:
                 System.out.println("Method id is Chosen Error!");
         }
