@@ -39,6 +39,7 @@ public class FuncExecTimeGen {
         arimaReader.getARIMA();
         arimaReader.getGRU();
         arimaReader.getIce();
+        arimaReader.getSpes();
         arimaReader.getSPFaaS();
         System.out.println("Arima read------");
 
