@@ -68,6 +68,7 @@ public class OverFramework {
                 break;
             case 8:
                 Spes.run(sid);
+                break;
             default:
                 System.out.println("Method id is Chosen Error!");
         }
