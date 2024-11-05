@@ -270,9 +270,9 @@ public class LoadGenController {
 		}
 
 		public void run() {
-			ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
+			//ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
 			//ArrayList<Integer> list = ARIMAReader.IceList.get(serviceId);
-			//ArrayList<Integer> list = ARIMAReader.SpesList.get(serviceId);
+			ArrayList<Integer> list = ARIMAReader.SpesList.get(serviceId);
 			ArrayList<Integer> invokeList = new ArrayList<>();
 			int n = 0;
 			for(Integer i : list)
@@ -285,6 +285,7 @@ public class LoadGenController {
 				if(i == 1 && ConfigPara.funcFlagArray[serviceId-1] == 0)
 				{
 					System.out.println(ConfigPara.funcName[serviceId-1] + " prewarm now.");
+					ConfigPara.preWarmTime[serviceId - 1]++;
 					if(ConfigPara.funcCapacity[serviceId - 1] > ConfigPara.getRemainMemCapacity()) {
 						ConfigPara.containerRelease(serviceId); //替换容器
 					}
@@ -360,7 +361,7 @@ public class LoadGenController {
 //					ConfigPara.setMemoryCapacity(30000.0 - d);
 //				}
 			}
-			String csvFilePath = "/home/zyy/spes_memory_1.csv";
+			String csvFilePath = "/home/zyy/spes_memory_new.csv";
 			//String csvFilePath = "/home/zyy/Ice_memory_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
@@ -377,7 +378,7 @@ public class LoadGenController {
 //				System.out.println(list.get(i));
 //			}
 
-			String csvFilePath1 = "/home/zyy/spes_rate_1.csv";
+			String csvFilePath1 = "/home/zyy/spes_rate_new.csv";
 			//String csvFilePath1 = "/home/zyy/Ice_rate_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));

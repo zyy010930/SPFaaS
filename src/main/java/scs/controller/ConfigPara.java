@@ -64,6 +64,8 @@ public class ConfigPara {
 
     public static double gama;
 
+    public static Integer[] preWarmTime;
+
     public ConfigPara() {
         maxFuncCapacity = 43500.0;
         beta = 0.5;
@@ -94,6 +96,7 @@ public class ConfigPara {
         standard = new Double[300];
         cv = new Double[300];
         timeList = new ArrayList<>();
+        preWarmTime = new Integer[300];
 
 
         for(int i=0;i<300;i++)
@@ -118,6 +121,7 @@ public class ConfigPara {
             mean[i] = 0.0;
             standard[i] = 0.0;
             cv[i] = 0.0;
+            preWarmTime[i] = 0;
         }
     }
 
