@@ -284,8 +284,8 @@ public class LoadGenController {
 				}
 				if(i == 1 && ConfigPara.funcFlagArray[serviceId-1] == 0)
 				{
-					System.out.println(ConfigPara.funcName[serviceId-1] + " prewarm now.");
 					ConfigPara.preWarmTime[serviceId - 1]++;
+					System.out.println(ConfigPara.funcName[serviceId-1] + " prewarm now. " + ConfigPara.preWarmTime[serviceId - 1]);
 					if(ConfigPara.funcCapacity[serviceId - 1] > ConfigPara.getRemainMemCapacity()) {
 						ConfigPara.containerRelease(serviceId); //替换容器
 					}

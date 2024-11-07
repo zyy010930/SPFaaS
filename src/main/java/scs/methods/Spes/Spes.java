@@ -37,11 +37,13 @@ public class Spes {
 
         int lastTime = ConfigPara.invokeTime[serviceId-1];
         int lastPre = ConfigPara.preWarmTime[serviceId-1];
+        System.out.println(ConfigPara.funcName[serviceId-1] + " lastPre = " + lastPre);
         Thread.sleep((long) ConfigPara.keepAlive[serviceId-1]);
+        System.out.println(ConfigPara.funcName[serviceId-1] + " nowPre = " + ConfigPara.preWarmTime[serviceId-1]);
         if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime && ConfigPara.preWarmTime[serviceId-1] > lastPre)
         {
             Thread.sleep(300000);
-            System.out.println(ConfigPara.funcName[serviceId-1] + "keep prewarm\n");
+            System.out.println(ConfigPara.funcName[serviceId-1] + "keep prewarm");
         }
         if(ConfigPara.funcFlagArray[serviceId-1] == 1 && ConfigPara.invokeTime[serviceId-1] == lastTime) //如果期间没有新的调用，就直接释放
         {
