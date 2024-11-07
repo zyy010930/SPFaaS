@@ -274,11 +274,13 @@ public class LoadGenController {
 			//ArrayList<Integer> list = ARIMAReader.IceList.get(serviceId);
 			ArrayList<Integer> list = ARIMAReader.SpesList.get(serviceId);
 			ArrayList<Integer> invokeList = new ArrayList<>();
+			ArrayList<Integer> preWarmList = new ArrayList<>();
 			int n = 0;
 			for(Integer i : list)
 			{
 				invokeList.add(ConfigPara.invokeTime[serviceId-1]);
-				if(n >= 10 && i == 0 && Objects.equals(ConfigPara.invokeTime[serviceId - 1], invokeList.get(n-10)))
+				preWarmList.add(ConfigPara.preWarmTime[serviceId-1]);
+				if(n >= 10 && i == 0 && Objects.equals(ConfigPara.invokeTime[serviceId - 1], invokeList.get(n-10)) && Objects.equals(ConfigPara.preWarmTime[serviceId - 1], preWarmList.get(n-10)))
 				{
 					ConfigPara.funcFlagArray[serviceId - 1] = 0;
 				}
