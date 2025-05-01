@@ -3,6 +3,7 @@ package scs.methods;
 import scs.controller.OperWaitQueue;
 import scs.methods.FaaSCache.GreedyDual;
 import scs.methods.Ice.IceBreak;
+import scs.methods.LCS.Lcs;
 import scs.methods.LRFU.LFU;
 import scs.methods.LRFU.LRU;
 import scs.methods.Spes.Spes;
@@ -68,6 +69,9 @@ public class OverFramework {
                 break;
             case 8:
                 Spes.run(sid);
+                break;
+            case 9:
+                Lcs.run(sid);
                 break;
             default:
                 System.out.println("Method id is Chosen Error!");
