@@ -17,6 +17,8 @@ public class ARIMAReader {
 
     public static Map<Integer,ArrayList<Integer>> SpesList = new HashMap<>();
 
+    public static Map<Integer,ArrayList<Integer>> EnsembleList = new HashMap<>();
+
     public static Map<Integer,ArrayList<Integer>> SPFaaSList = new HashMap<>();
 
     public ARIMAReader(){}
@@ -114,6 +116,26 @@ public class ARIMAReader {
                     list.add(Integer.parseInt(country[i]));
                 }
                 SpesList.put(num, list);
+                num++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getEnsemble() {
+        String csvFile = "/home/zyy/ensemble_pre.csv";
+        String line = "";
+        String cvsSplitBy = ",";
+        int num = 1;
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))){
+            while ((line = br.readLine()) != null) {
+                String[] country = line.split(cvsSplitBy);
+                ArrayList<Integer> list = new ArrayList<>();
+                for (int i = 0; i < country.length; i++) {
+                    list.add(Integer.parseInt(country[i]));
+                }
+                EnsembleList.put(num, list);
                 num++;
             }
         } catch (IOException e) {
