@@ -273,6 +273,7 @@ public class LoadGenController {
 			//ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
 			//ArrayList<Integer> list = ARIMAReader.IceList.get(serviceId);
 			ArrayList<Integer> list = ARIMAReader.EnsembleList.get(serviceId);
+			System.out.println("ensemble list:" + list.size());
 			ArrayList<Integer> invokeList = new ArrayList<>();
 			ArrayList<Integer> preWarmList = new ArrayList<>();
 			int n = 0;
