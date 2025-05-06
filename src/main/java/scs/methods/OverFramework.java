@@ -8,6 +8,7 @@ import scs.methods.LCS.Lcs;
 import scs.methods.LRFU.LFU;
 import scs.methods.LRFU.LRU;
 import scs.methods.Spes.Spes;
+import scs.methods.TCN.Tcn;
 import scs.methods.Wild.Wild;
 import scs.methods.Zyy.ZyyFaaS;
 import scs.methods.ZyyCache.Hybrid;
@@ -76,6 +77,9 @@ public class OverFramework {
                 break;
             case 10:
                 Ensemble.run(sid);
+                break;
+            case 11:
+                Tcn.run(sid);
                 break;
             default:
                 System.out.println("Method id is Chosen Error!");
