@@ -243,10 +243,10 @@ public class LoadGenController {
 		public void run(){
 			System.out.println("new start");
 			//SPFaaS
-//			PreWarmThread thread = new PreWarmThread(serviceId);
-//			ExecutorService executorService = Executors.newFixedThreadPool(1);
-//			executorService.execute(thread);
-//			executorService.shutdown();
+			PreWarmThread thread = new PreWarmThread(serviceId);
+			ExecutorService executorService = Executors.newFixedThreadPool(1);
+			executorService.execute(thread);
+			executorService.shutdown();
 			for(Integer time : this.list)
 			{
 				System.out.println("function:" + serviceId + "sleep:" + time);
@@ -270,8 +270,8 @@ public class LoadGenController {
 		}
 
 		public void run() {
-			//ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
-			ArrayList<Integer> list = ARIMAReader.IceList.get(serviceId);
+			ArrayList<Integer> list = ARIMAReader.SPFaaSList.get(serviceId);
+			//ArrayList<Integer> list = ARIMAReader.IceList.get(serviceId);
 			//ArrayList<Integer> list = ARIMAReader.SpesList.get(serviceId);
 			System.out.println("tcn list:" + list.size());
 			ArrayList<Integer> invokeList = new ArrayList<>();
@@ -323,7 +323,7 @@ public class LoadGenController {
 		}
 		public void run() {
 			try {
-				OverFramework.run(this.serviceId,3);
+				OverFramework.run(this.serviceId,6);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
@@ -364,7 +364,7 @@ public class LoadGenController {
 //					ConfigPara.setMemoryCapacity(30000.0 - d);
 //				}
 			}
-			String csvFilePath = "/home/zyy/wild_memory.csv";
+			String csvFilePath = "/home/zyy/SPFaaS_memory80.csv";
 			//String csvFilePath = "/home/zyy/Ice_memory_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
@@ -381,7 +381,7 @@ public class LoadGenController {
 //				System.out.println(list.get(i));
 //			}
 
-			String csvFilePath1 = "/home/zyy/wild_rate.csv";
+			String csvFilePath1 = "/home/zyy/SPFaaS_rate80.csv";
 			//String csvFilePath1 = "/home/zyy/Ice_rate_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));
