@@ -285,7 +285,7 @@ public class LoadGenController {
 				{
 					ConfigPara.funcFlagArray[serviceId - 1] = 0;
 				}
-				if(i == 1 && ConfigPara.funcFlagArray[serviceId-1] == 0)
+				if(i != 0 && ConfigPara.funcFlagArray[serviceId-1] == 0) //(!=0 ==1)
 				{
 					ConfigPara.preWarmTime[serviceId - 1]++;
 					System.out.println(ConfigPara.funcName[serviceId-1] + " prewarm now. " + ConfigPara.preWarmTime[serviceId - 1]);
@@ -364,7 +364,7 @@ public class LoadGenController {
 //					ConfigPara.setMemoryCapacity(30000.0 - d);
 //				}
 			}
-			String csvFilePath = "/home/zyy/SPFaaS_memoryγ0.9.csv";
+			String csvFilePath = "/home/zyy/hw_SPFaaS_memory.csv";
 			//String csvFilePath = "/home/zyy/Ice_memory_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath));
@@ -381,7 +381,7 @@ public class LoadGenController {
 //				System.out.println(list.get(i));
 //			}
 
-			String csvFilePath1 = "/home/zyy/SPFaaS_rateγ0.9.csv";
+			String csvFilePath1 = "/home/zyy/hw_SPFaaS_rate.csv";
 			//String csvFilePath1 = "/home/zyy/Ice_rate_new.csv";
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath1));

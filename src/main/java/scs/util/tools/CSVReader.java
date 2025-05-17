@@ -52,7 +52,8 @@ public class CSVReader {
     }
 
     public Map<Integer,ArrayList<Integer>> getAzureTest() {
-        String csvFile = "/home/zyy/func300.csv";
+        //String csvFile = "/home/zyy/func300.csv";
+        String csvFile = "/home/zyy/func300_huawei.csv";
         String line = "";
         String cvsSplitBy = ",";
         Map<Integer,ArrayList<Integer>> InvokeMap = new HashMap<>();
