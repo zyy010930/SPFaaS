@@ -69,7 +69,7 @@ public class ConfigPara {
     public ConfigPara() {
         //maxFuncCapacity = 43500.0;
         beta = 0.5;
-        gama = 0.1;
+        gama = 0.2;
         maxFuncCapacity = 22500.0;
         currFuncCapacity = 0.0;
         funcCapacity = new Double[300];
