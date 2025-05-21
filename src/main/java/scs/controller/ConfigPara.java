@@ -67,10 +67,10 @@ public class ConfigPara {
     public static Integer[] preWarmTime;
 
     public ConfigPara() {
-        //maxFuncCapacity = 43500.0;
+        maxFuncCapacity = 43500.0;
         beta = 0.5;
-        gama = 0.9;
-        maxFuncCapacity = 18000.0;
+        gama = 0.5;
+        //maxFuncCapacity = 22500.0;
         currFuncCapacity = 0.0;
         funcCapacity = new Double[300];
 
