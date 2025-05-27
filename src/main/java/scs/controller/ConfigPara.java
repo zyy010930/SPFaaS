@@ -5,6 +5,8 @@ import scs.util.tools.HttpClientPool;
 
 import java.util.*;
 
+import static java.lang.Math.max;
+import static scs.methods.MultiContainer.SPFaaS.DFSFunctionMulti;
 import static scs.methods.Zyy.ZyyFaaS.DFSFunction;
 
 /**
@@ -64,9 +66,12 @@ public class ConfigPara {
 
     public static double gama;
 
+    public static Integer maxContainer;
+
     public static Integer[] preWarmTime;
 
     public ConfigPara() {
+        maxContainer = 2;
         maxFuncCapacity = 43500.0;
         beta = 0.5;
         gama = 0.5;
@@ -216,6 +221,82 @@ public class ConfigPara {
             if(bestList.contains(i)) {
                 System.out.println(i + "-----------release-----------");
                 ConfigPara.funcFlagArray[i] = 0;
+                //HttpClientPool.getResponseTime(httpClient, url0);
+                ConfigPara.getRemainMemCapacity();
+            }
+        }
+    }
+
+    public static synchronized void containerReleaseMulti(Integer serviceId){
+        double kp = 0;
+        int invoke = 0;
+        int coldStartTime = 0;
+        CloseableHttpClient httpClient;
+        String url = "http://192.168.1.7:31112/function/func"+serviceId;
+        String url0 = "http://192.168.1.7:31112/zero/func"+serviceId;
+        httpClient= HttpClientPool.getInstance().getConnection();
+        for(int j=0;j<ConfigPara.funcFlagArray.length;j++)
+        {
+            if(ConfigPara.invokeTime[j]>invoke)
+            {
+                invoke = ConfigPara.invokeTime[j];
+            }
+            if(ConfigPara.keepAlive[j]>kp)
+            {
+                kp = ConfigPara.keepAlive[j];
+            }
+            if(ConfigPara.coldStartTime[j]>coldStartTime)
+            {
+                coldStartTime = ConfigPara.coldStartTime[j];
+            }
+        }
+        for(int i=0;i<300;i++)
+        {
+            //ConfigPara.costNum[i] = 0.5*(ConfigPara.invokeTime[i]/invoke) + 0.5*(ConfigPara.keepAlive[i]/kp); //计算每个函数容器的释放代价
+            ConfigPara.costNum[i] = ConfigPara.beta*((ConfigPara.invokeTime[i]+1)/(invoke+1)) + (1-ConfigPara.beta)*(1 - (ConfigPara.coldStartTime[i]+1)/(coldStartTime+1)); //计算每个函数容器的释放代价
+        }
+
+        Double min = Double.MAX_VALUE;
+        Set<Integer> bestList = new HashSet<>();
+        int num = 0;
+        Random random = new Random();
+        int minValue = 0;
+        int maxValue = 299;
+        int randomInt = random.nextInt(maxValue - minValue + 1) + minValue;
+        for(int i=randomInt;i < randomInt + 300;i++)
+        {
+            int id = i % 300;
+            if(ConfigPara.funcFlagArray[id] <= 0)
+            {
+                continue;
+            }
+            double cost = 0.0;
+            Set<Integer> list = new HashSet<>();
+            Map<Set<Integer>,Double> mp1 = new HashMap<>();
+            mp1 = DFSFunctionMulti(list,id,ConfigPara.funcCapacity[serviceId - 1],ConfigPara.costNum[id]);
+            Set<Integer> list1 = new HashSet<>();
+            for (Map.Entry<Set<Integer>,Double> entry : mp1.entrySet()) {
+                cost = entry.getValue();
+                list1.addAll(entry.getKey());
+            }
+            if(cost < min)
+            {
+                min = cost;
+                bestList.clear();
+                bestList.addAll(list1);
+            }
+            if(num == 5)
+            {
+                break;
+            }
+            num++;
+        }
+        for(int i=0;i<300;i++)
+        {
+            if(bestList.contains(i)) {
+                System.out.println(i + "-----------release-----------");
+                ConfigPara.funcFlagArray[i]--;
+                ConfigPara.funcFlagArray[i] = max(0, ConfigPara.funcFlagArray[i]);
                 //HttpClientPool.getResponseTime(httpClient, url0);
                 ConfigPara.getRemainMemCapacity();
             }

@@ -88,6 +88,12 @@ public class OperWaitQueue {
         //Repository.loaderMap.get(sid).getAbstractJobDriver().ZyyExec(sid);
     }
 
+    public static void execFuncZyyMulti(Integer sid) throws InterruptedException {
+        JobExec jobExec = new JobExec();
+        jobExec.ZyyExecMulti(sid);
+        //Repository.loaderMap.get(sid).getAbstractJobDriver().ZyyExec(sid);
+    }
+
     public static void releaseFunc(Integer sid) {
         CloseableHttpClient httpClient;
         String url = "http://192.168.1.7:31112/function/func"+sid;

@@ -7,6 +7,7 @@ import scs.methods.Ice.IceBreak;
 import scs.methods.LCS.Lcs;
 import scs.methods.LRFU.LFU;
 import scs.methods.LRFU.LRU;
+import scs.methods.MultiContainer.SPFaaS;
 import scs.methods.Spes.Spes;
 import scs.methods.TCN.Tcn;
 import scs.methods.Wild.Wild;
@@ -80,6 +81,9 @@ public class OverFramework {
                 break;
             case 11:
                 Tcn.run(sid);
+                break;
+            case 12:
+                SPFaaS.run(sid);
                 break;
             default:
                 System.out.println("Method id is Chosen Error!");
