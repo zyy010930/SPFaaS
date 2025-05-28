@@ -71,7 +71,7 @@ public class ConfigPara {
     public static Integer[] preWarmTime;
 
     public ConfigPara() {
-        maxContainer = 2;
+        maxContainer = 3;
         maxFuncCapacity = 43500.0;
         beta = 0.5;
         gama = 0.5;
